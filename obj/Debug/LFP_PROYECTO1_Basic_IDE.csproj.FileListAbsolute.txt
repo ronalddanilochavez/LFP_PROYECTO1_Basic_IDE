@@ -1,0 +1,10 @@
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\bin\Debug\LFP_PROYECTO1_Basic_IDE.exe.config
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\bin\Debug\LFP_PROYECTO1_Basic_IDE.exe
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\bin\Debug\LFP_PROYECTO1_Basic_IDE.pdb
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\obj\Debug\LFP_PROYECTO1_Basic_IDE.csprojAssemblyReference.cache
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\obj\Debug\LFP_PROYECTO1_Basic_IDE.Form1.resources
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\obj\Debug\LFP_PROYECTO1_Basic_IDE.Properties.Resources.resources
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\obj\Debug\LFP_PROYECTO1_Basic_IDE.csproj.GenerateResource.cache
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\obj\Debug\LFP_PROYECTO1_Basic_IDE.csproj.CoreCompileInputs.cache
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\obj\Debug\LFP_PROYECTO1_Basic_IDE.exe
+D:\DOCUMENTS\Visual Studio 2019\Projects\LFP_PROYECTO1_Basic_IDE\obj\Debug\LFP_PROYECTO1_Basic_IDE.pdb

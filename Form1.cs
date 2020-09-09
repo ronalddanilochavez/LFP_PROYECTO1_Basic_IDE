@@ -13,6 +13,7 @@ namespace LFP_PROYECTO1_Basic_IDE
 {
     public partial class Form1 : Form
     {
+        MyLibraries myLibraries = new MyLibraries();
         public Form1()
         {
             InitializeComponent();
@@ -45,25 +46,112 @@ namespace LFP_PROYECTO1_Basic_IDE
                 e.Handled = true;
             }
             */
+
+            /*
+            myLibraries.checkKeyword("+", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("-", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("*", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("/", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("++", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("++", Color.Blue, 0, IDELexer);
+
+            // Relational operators
+            myLibraries.checkKeyword(">", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("<", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword(">=", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("<=", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("==", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("!=", Color.Blue, 0, IDELexer);
+
+            // Logical operators
+            myLibraries.checkKeyword("||", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("&&", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("!", Color.Blue, 0, IDELexer);
+
+            // Agrupation signs
+            myLibraries.checkKeyword("(", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword(")", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("{", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("}", Color.Blue, 0, IDELexer);
+
+            // Agination and end of sentence
+            myLibraries.checkKeyword("=", Color.Magenta, 0, IDELexer);
+            myLibraries.checkKeyword(";", Color.Magenta, 0, IDELexer);
+
+            // Reserved words in green
+            myLibraries.checkKeyword("SI", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("SINO", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("SINO_SI", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("MIENTRAS", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("HACER", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("PARA", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("DESDE", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("HASTA", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("INCREMENTO", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("INICIO", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("FIN", Color.Green, 0, IDELexer);
+
+            // Reserved words in colors
+            myLibraries.checkKeyword("entero", Color.Purple, 0, IDELexer);
+            myLibraries.checkKeyword("decimal", Color.LightBlue, 0, IDELexer);
+            myLibraries.checkKeyword("cadena", Color.Gray, 0, IDELexer);
+            myLibraries.checkKeyword("booleano", Color.Orange, 0, IDELexer);
+            myLibraries.checkKeyword("caracter", Color.Brown, 0, IDELexer);
+            */
         }
 
         private void IDELexer_TextChanged(object sender, EventArgs e)
         {
-            /*        
-            int pos = 0;
-            foreach (string ln in IDELexer.Lines)
-            {
-                Color[] Syntax = ParseString(ln);
-                int cur = 0;
-                foreach (char chr in ln)
-                {
-                    IDELexer.SelectionStart = pos;
-                    IDELexer.SelectionLength = 1;
-                    IDELexer.SelectionColor = Syntax[cur];
-                    cur++;
-                    pos++;
-                }
-            }*/
+            /*// Arithmetical operators
+            myLibraries.checkKeyword("+", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("-", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("*", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("/", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("++", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("++", Color.Blue, 0, IDELexer);
+
+            // Relational operators
+            myLibraries.checkKeyword(">", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("<", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword(">=", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("<=", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("==", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("!=", Color.Blue, 0, IDELexer);
+
+            // Logical operators
+            myLibraries.checkKeyword("||", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("&&", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword("!", Color.Blue, 0, IDELexer);
+
+            // Agrupation signs
+            myLibraries.checkKeyword("(", Color.Blue, 0, IDELexer);
+            myLibraries.checkKeyword(")", Color.Blue, 0, IDELexer);
+
+            // Agination and end of sentence
+            myLibraries.checkKeyword("=", Color.Magenta, 0, IDELexer);
+            myLibraries.checkKeyword(";", Color.Magenta, 0, IDELexer);
+
+            // Reserved words in green
+            myLibraries.checkKeyword("SI", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("SINO", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("SINO_SI", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("MIENTRAS", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("HACER", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("PARA", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("DESDE", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("HASTA", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("INCREMENTO", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("INICIO", Color.Green, 0, IDELexer);
+            myLibraries.checkKeyword("FIN", Color.Green, 0, IDELexer);
+
+            // Reserved words in colors
+            myLibraries.checkKeyword("entero", Color.Purple, 0, IDELexer);
+            myLibraries.checkKeyword("decimal", Color.LightBlue, 0, IDELexer);
+            myLibraries.checkKeyword("cadena", Color.Gray, 0, IDELexer);
+            myLibraries.checkKeyword("booleano", Color.Orange, 0, IDELexer);
+            myLibraries.checkKeyword("caracter", Color.Brown, 0, IDELexer);*/
+
+            myLibraries.processText(IDELexer.Text, IDELexer);
         }
     }
 }

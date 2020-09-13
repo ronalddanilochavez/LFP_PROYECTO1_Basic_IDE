@@ -13,6 +13,9 @@ namespace LFP_PROYECTO1_Basic_IDE
 {
     public partial class Form1 : Form
     {
+        private MyLibraries myLibraries = new MyLibraries();
+
+        private int letterPos = 0; 
         public Form1()
         {
             InitializeComponent();
@@ -47,23 +50,24 @@ namespace LFP_PROYECTO1_Basic_IDE
             */
         }
 
+        /*
+        myLibraries.processFile(IDELexer.Text, IDELexer);
+
+        RowColumn.Text = myLibraries.cursorRowPosition(IDELexer) + "," + myLibraries.cursorColumnPosition(IDELexer);
+        */
+
         private void IDELexer_TextChanged(object sender, EventArgs e)
         {
-            /*        
-            int pos = 0;
-            foreach (string ln in IDELexer.Lines)
-            {
-                Color[] Syntax = ParseString(ln);
-                int cur = 0;
-                foreach (char chr in ln)
-                {
-                    IDELexer.SelectionStart = pos;
-                    IDELexer.SelectionLength = 1;
-                    IDELexer.SelectionColor = Syntax[cur];
-                    cur++;
-                    pos++;
-                }
-            }*/
+            // We need to asign the return of the function to some integer that counts the last colored index
+            letterPos = myLibraries.processText(IDELexer);
+
+            //myLibraries.processFile(IDELexer.Text, IDELexer);
+
+            // To see the row and column
+            RowColumn.Text = myLibraries.cursorRowPosition(IDELexer) + "," + myLibraries.cursorColumnPosition(IDELexer);
+
+            // To log the tokens found
+            Log.Text = myLibraries.tokenList;
         }
     }
 }

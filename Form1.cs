@@ -13,7 +13,9 @@ namespace LFP_PROYECTO1_Basic_IDE
 {
     public partial class Form1 : Form
     {
-        MyLibraries myLibraries = new MyLibraries();
+        private MyLibraries myLibraries = new MyLibraries();
+
+        private int letterPos = 0; 
         public Form1()
         {
             InitializeComponent();
@@ -151,7 +153,8 @@ namespace LFP_PROYECTO1_Basic_IDE
             myLibraries.checkKeyword("booleano", Color.Orange, 0, IDELexer);
             myLibraries.checkKeyword("caracter", Color.Brown, 0, IDELexer);*/
 
-            myLibraries.processText(IDELexer.Text, IDELexer);
+            // We need to asign the return of the function to some integer that counts the last colored index
+            letterPos = myLibraries.processText3(IDELexer.Text, IDELexer, letterPos);
         }
     }
 }

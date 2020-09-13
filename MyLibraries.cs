@@ -14,18 +14,21 @@ namespace LFP_PROYECTO1_Basic_IDE
     {
         private string[] bLueTokens = {"+","-","*","/","++","--",">","<",">=","<=","==","!=","||","&&","!","(",")"};
         private string[] pinkTokens = { "=",";"};
-        private string[] greenTokens = { "SI", "SINO","FIN_SI","SINO_SI","EN_CASO","CASO:","OTRO CASO:","SEA:","FIN_CASO", "PARA","FIN_PARA","MIENTRAS","FIN_MIENTRAS","HACER","DESDE","HASTA","INCREMENTO","REINICIAR CILO","TERMINAR CICLO"};
+        private string[] greenTokens = {"SI", "SINO","FIN_SI","SINO_SI","EN_CASO","CASO:","OTRO CASO:","SEA:","FIN_CASO", "PARA","FIN_PARA","MIENTRAS","FIN_MIENTRAS","HACER","DESDE","HASTA","INCREMENTO","REINICIAR CICLO","TERMINAR CICLO"};
         private string[] purpleTokens = { "entero" };
         private string[] cyanTokens = { "decimal" };
         private string[] grayTokens = { "cadena" };
         private string[] orangeTokens = { "booleano" };
         private string[] brownTokens = { "caracter" };
 
-        public void processString(string stringLine)
-        {
+        private bool closedString = true;
 
-        }
+        private bool closedLongCommentary = true;
+        private bool closedShortCommentary = true;
 
+        public string tokenList = "**************************************";
+
+        // !
         public void colorString(int start, int length, Color color, RichTextBox myRichTextBox)
         {
             myRichTextBox.SelectionStart = start;
@@ -33,49 +36,77 @@ namespace LFP_PROYECTO1_Basic_IDE
             myRichTextBox.SelectionColor = color;
         }
 
-        public void checkKeyword(string word, Color color, int startIndex, RichTextBox myRichTextBox)
+        // !
+        public void checkKeyword(string word, Color color, int startIndex, RichTextBox rtb
+            )
         {
-            if (myRichTextBox.Text.Contains(word))
+            if (rtb.Text.Contains(word))
             {
                 int index = -1;
-                int selectStart = myRichTextBox.SelectionStart;
+                int selectStart = rtb.SelectionStart;
 
-                while ((index = myRichTextBox.Text.IndexOf(word, (index + 1))) != -1)
+                while ((index = rtb.Text.IndexOf(word, (index + 1))) != -1)
                 {
-                    myRichTextBox.Select((index + startIndex), word.Length);
-                    myRichTextBox.SelectionColor = color;
-                    myRichTextBox.Select(selectStart, 0);
-                    myRichTextBox.SelectionColor = Color.Black;
+                    rtb.Select((index + startIndex), word.Length);
+                    rtb.SelectionColor = color;
+                    rtb.Select(selectStart, 0);
+                    rtb.SelectionColor = Color.Black;
                 }
             }
         }
 
-        public int checkKeyword2(string word, Color color, int startIndex, RichTextBox myRichTextBox)
+        // !
+        public int checkKeyword2(string word, Color color, int startIndex, RichTextBox rtb
+            )
         {
-            if (myRichTextBox.Text.Contains(word))
+            if (rtb.Text.Contains(word))
             {
-                int index = -1;
-                int selectStart = myRichTextBox.SelectionStart;
-
-                while ((index = myRichTextBox.Text.IndexOf(word, (index + 1))) != -1)
-                {
-                    myRichTextBox.Select((index + startIndex), word.Length);
-                    myRichTextBox.SelectionColor = color;
-                    myRichTextBox.Select(selectStart, 0);
-                    myRichTextBox.SelectionColor = Color.Black;
-                }
+                rtb.Select(startIndex, word.Length);
+                rtb.SelectionColor = color;
+                rtb.Select(startIndex + word.Length, 0);
+                rtb.SelectionColor = Color.Black;
             }
 
             return startIndex + word.Length;
         }
 
-        public int colorText(string word, int start, Color color, RichTextBox myRichTextBox)
+        // !
+        public void checkKeyword3(string word, Color color, RichTextBox rtb)
         {
-            myRichTextBox.Select(start, word.Length);
-            myRichTextBox.SelectionColor = color;
+            if (rtb.Text.Contains(word))
+            {
+                rtb.Select(rtb.Text.IndexOf(word), word.Length);
+                rtb.SelectionColor = color;
+            }
+        }
 
-            myRichTextBox.Select(start + word.Length, 0);
-            myRichTextBox.SelectionColor = Color.Black;
+        public int colorText(string word, int start, Color wordColor, Color finalColor, RichTextBox rtb)
+        {
+            rtb.Select(start, word.Length);
+            rtb.SelectionColor = wordColor;
+
+            rtb.Select(start + word.Length, 0);
+            rtb.SelectionColor = finalColor;
+
+            //rtb.SelectionStart = start;
+            //rtb.SelectionLength = word.Length;
+            //rtb.SelectionColor = color;
+
+            //rtb.Select(start + word.Length, 0);
+            //rtb.SelectionColor = Color.Black;
+
+            // We return the position of the next index
+            return start + word.Length;
+        }
+
+        /*
+        public int colorTextFile(string word, int start, Color wordColor, Color finalColor, RichTextBox rtb)
+        {
+            rtb.Select(start, word.Length);
+            rtb.SelectionColor = wordColor;
+
+            rtb.Select(start + word.Length, 0);
+            rtb.SelectionColor = finalColor;
 
             //myRichTextBox.SelectionStart = start;
             //myRichTextBox.SelectionLength = word.Length;
@@ -87,186 +118,290 @@ namespace LFP_PROYECTO1_Basic_IDE
             // We return the position of the next index
             return start + word.Length;
         }
+        */
 
-        public int processText(string text, RichTextBox rtb, int start)
+        //public int processText(string text, RichTextBox rtb, int start)
+        public int processText(RichTextBox rtb)
         {
-            int i = start;
-
-            while (i < text.Length)
-            {
-                // Arithmetical operators
-                if (text[i] == '+')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '-')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '*')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '/')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-
-                // Arithmetical operators
-                else if (text[i] == '>')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '<')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '=')
-                {
-                    if (i - 1 >= 0)
-                    {
-                        if (text[i - 1] == '=')
-                        {
-                            return colorText(Convert.ToString(text[i - 1] + text[i]), i - 1, Color.Blue, rtb);
-                        }
-                    }
-
-                    return colorText(Convert.ToString(text[i]), i, Color.Magenta, rtb);
-                }
-
-                // Logic operators
-                else if (text[i] == '!')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '|')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '&')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-
-                // Agrupation signs
-
-                else if (text[i] == '(')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == ')')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '{')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-                else if (text[i] == '}')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-
-                // End of sentence
-                else if (text[i] == ';')
-                {
-                    return colorText(Convert.ToString(text[i]), i, Color.Blue, rtb);
-                }
-
-
-
-                //myRichTextBox.Select(i + 1, 1);
-                //myRichTextBox.SelectionColor = Color.Black;
-
-                i++;
-            }
-
-            return start;
-        }
-
-        public int processText2(string text, RichTextBox rtb, int start)
-        {
-            int i = rtb.Text.Length - 1;
             string word = "";
 
-            while (i >= start)
+            // When open a string
+            if (rtb.Text.Length >= 1)
             {
-                word = Convert.ToString(rtb.Text[i]) + word;
-
-                for (int k = 0; k < pinkTokens.Length; k++)
+                if (rtb.Text[rtb.Text.Length - 1] == '"')
                 {
-                    if (word == pinkTokens[k] && rtb.Text[rtb.Text.Length - 2] != '=')
-                    {
-                        colorText(word, rtb.Text.Length - pinkTokens[k].Length, Color.Magenta, rtb);
-                        return text.Length;
-                    }
+                    closedString = !closedString;
                 }
-
-                for (int k = 0; k < bLueTokens.Length; k++)
-                {
-                    if (word == bLueTokens[k])
-                    {
-                        colorText(word, rtb.Text.Length - bLueTokens[k].Length, Color.Blue, rtb);
-                        return text.Length;
-                    }
-                }
-
-                i--;
             }
 
-            return start;
-        }
-
-        public int processText3(string text, RichTextBox rtb, int start)
-        {
-            string word = ""; 
-
+            // To find the main tokens
             for (int i = (rtb.Text.Length - 1); i >= 0; i--)
             {
                 word = Convert.ToString(rtb.Text[i]) + word;
 
-                /*if (rtb.Text[rtb.Text.Length - 1] == '+' || rtb.Text[rtb.Text.Length - 1] == '-' || rtb.Text[rtb.Text.Length - 1] == '*' || rtb.Text[rtb.Text.Length - 1] == '/' || rtb.Text[rtb.Text.Length - 1] == '<' || rtb.Text[rtb.Text.Length - 1] == '>' || rtb.Text[rtb.Text.Length - 1] == '!' || rtb.Text[rtb.Text.Length - 1] == '(' || rtb.Text[rtb.Text.Length - 1] == ')')
-                {
-                    colorText(, rtb.Text.Length - bLueTokens[k].Length, Color.Blue, rtb);
-                }*/
 
+
+                // { "=",";"}
                 for (int k = 0; k < pinkTokens.Length; k++)
                 {
                     if (word == pinkTokens[k] && rtb.Text[rtb.Text.Length - 2] != '=' && rtb.Text[rtb.Text.Length - 2] != '!' && rtb.Text[rtb.Text.Length - 2] != '>' && rtb.Text[rtb.Text.Length - 2] != '<')
                     {
-                        colorText(word, rtb.Text.Length - pinkTokens[k].Length, Color.Magenta, rtb);
-                        return text.Length;
+                        colorText(word, rtb.Text.Length - pinkTokens[k].Length, Color.Magenta, Color.Black, rtb);
+                        tokenList += "\nNuevo Token = " + word; 
                     }
                 }
 
+                // {"+","-","*","/","++","--",">","<",">=","<=","==","!=","||","&&","!","(",")"}
                 for (int k = 0; k < bLueTokens.Length; k++)
                 {
-                    if (word == bLueTokens[k])
+                    if (word == bLueTokens[k] /*&& rtb.Text[rtb.Text.Length - 2] != '/' && rtb.Text[rtb.Text.Length - 1] != '*'*/)
                     {
-                        colorText(word, rtb.Text.Length - bLueTokens[k].Length, Color.Blue, rtb);
-                        return text.Length;
+                        colorText(word, rtb.Text.Length - bLueTokens[k].Length, Color.Blue, Color.Black, rtb);
+                        tokenList += "\nNuevo Token = " + word;
                     }
                 }
 
+                // { "SI", "SINO","FIN_SI","SINO_SI","EN_CASO","CASO:","OTRO CASO:","SEA:","FIN_CASO", "PARA","FIN_PARA","MIENTRAS","FIN_MIENTRAS","HACER","DESDE","HASTA","INCREMENTO","REINICIAR CICLO","TERMINAR CICLO"}
                 for (int k = 0; k < greenTokens.Length; k++)
                 {
                     if (word == greenTokens[k])
                     {
-                        colorText(word, rtb.Text.Length - greenTokens[k].Length, Color.Green, rtb);
-                        return text.Length;
+                        colorText(word, rtb.Text.Length - greenTokens[k].Length, Color.Green, Color.Black, rtb);
+                        tokenList += "\nNuevo Token = " + word;
+                    }
+                }
+
+                //////////////////////////////////////////////
+
+
+                if (word == "entero")
+                {
+                    colorText(word, rtb.Text.Length - 6, Color.Purple, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                }
+
+                if (word == "decimal")
+                {
+                    colorText(word, rtb.Text.Length - 7, Color.Cyan, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                }
+
+                if (word == "cadena")
+                {
+                    colorText(word, rtb.Text.Length - 6, Color.Gray, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                }
+
+                if (word == "booleano")
+                {
+                    colorText(word, rtb.Text.Length - 8, Color.Orange, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                }
+
+                if (word == "caracter")
+                {
+                    colorText(word, rtb.Text.Length - 8, Color.Brown, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                }
+
+                //////////////////////////////////////////////
+
+                // This limits the maximun length of "word"
+                if (i == rtb.Text.Length - 1000)
+                {
+                    return rtb.Text.Length;
+                }
+
+                //////////////////////////////////////////////
+
+                // Testing if a word is decimal before integer
+                if (isDecimal(word))
+                {
+                    colorText(word, rtb.Text.Length - word.Length, Color.Cyan, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                }
+
+                // Testing if a word is integer after decimal
+                if (isInteger(word))
+                {
+                    colorText(word, rtb.Text.Length - word.Length, Color.Purple, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                }
+
+                if (isBoolean(word))
+                {
+                    colorText(word, rtb.Text.Length - word.Length, Color.Orange, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                    return rtb.Text.Length;
+                }
+
+                if ( closedString == true && isString(word))
+                {
+                    colorText(word, rtb.Text.Length - word.Length, Color.Gray, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+                    break;
+                }
+
+                if (isCharacter(word))
+                {
+                    colorText(word, rtb.Text.Length - word.Length, Color.Brown, Color.Black, rtb);
+                    tokenList += "\nNuevo Token = " + word;
+
+                }
+
+                //////////////////////////////////////////////
+
+                // To paint the short commentary //.........
+                if (word == "//")
+                {
+                    closedShortCommentary = false;
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Red, rtb);
+                }
+                if (word.Length >= 2)
+                {
+                    if (closedShortCommentary == false && word[0] == '/' && word[1] == '/' && word[word.Length - 1] == '\n')
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
+                        closedShortCommentary = true;
+                        break;
+                    }
+                }
+
+                // To paint the long commentary between /*....*/
+                if (word == "/*")
+                {
+                    closedLongCommentary = false;
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Red, rtb);
+                }
+                if (word.Length >= 4)
+                {
+                    if (closedLongCommentary == false && word[0] == '/' && word[1] == '*' && word[word.Length - 2] == '*' && word[word.Length - 1] == '/')
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
+                        closedLongCommentary = true;
+                        break;
                     }
                 }
             }
 
-            return start;
+            return rtb.Text.Length;
         }
 
+        // !
+        public string tokenLog(string text)
+        {
+            string tokenList = "";
+            string word = "";
+
+            for (int i = 0; i < text.Length; i++ )
+            {
+                word = Convert.ToString(text[i]) + word;
+
+                for (int k = 0; k < bLueTokens.Length; k++)
+                {
+                    if (word == bLueTokens[k] )
+                    {
+                        tokenList += "\n" + "Nuevo Token = " + bLueTokens[k];  
+                    }
+                }
+            }
+
+            return tokenList;
+        }
+
+        // !
+        public void processFile(string text, RichTextBox rtb)
+        {
+            string word = "";
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                word = Convert.ToString(text[i]) + word;
+                processText(rtb);
+            }
+        }
+
+        public int cursorColumnPosition (RichTextBox rtb)
+        {
+            int numberColumn = 0;
+            int numberRow = 1;
+            string word = "";
+
+            for (int i = rtb.Text.Length - 1; i >= 0; i--)
+            {
+                if (rtb.Text[i] == '\n')
+                {
+                    numberRow++;
+                }
+            }
+
+            try
+            {
+                if (numberRow >= 1 && rtb.Lines[numberRow - 1].Length > 0)
+                {
+                    numberColumn = rtb.Lines[numberRow - 1].Length;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            /*
+            for (int i = rtb.Text.Length - 1; i >= 0; i--)
+            {
+                if (rtb.Text[i] == '\n')
+                {
+                    numberColumn = word.Length;
+                    break;
+                }
+
+                word = rtb.Text[i] + word;
+            }
+            */
+
+            return numberColumn;
+        }
+
+        public int cursorRowPosition (RichTextBox rtb)
+        {
+            int numberRow = 1;
+
+            for (int i = rtb.Text.Length - 1; i >= 0; i--)
+            {
+                if (rtb.Text[i] == '\n')
+                {
+                    numberRow++;
+                }
+            }
+
+            return numberRow;
+        }
         public bool isInteger(String token)
         {
             bool isInteger = false;
 
             for (int i = 0; i < token.Length; i++)
             {
+                // To test if the first character is '-' or a number and the next character is a number
+                if (i == 0 && token.Length > 1)
+                {
+                    if (token[i].Equals('-') || token[i].Equals('0') || token[i].Equals('1') || token[i].Equals('2') || token[i].Equals('3') || token[i].Equals('4') || token[i].Equals('5') || token[i].Equals('6') || token[i].Equals('7') || token[i].Equals('8') || token[i].Equals('9'))
+                    {
+                        if (token[i + 1].Equals('0') || token[i + 1].Equals('1') || token[i + 1].Equals('2') || token[i + 1].Equals('3') || token[i + 1].Equals('4') || token[i + 1].Equals('5') || token[i + 1].Equals('6') || token[i + 1].Equals('7') || token[i + 1].Equals('8') || token[i + 1].Equals('9'))
+                        {
+                            isInteger = true;
+                            continue;
+                        }
+                        else
+                        {
+                            isInteger = false;
+                            break;
+                        }
+                    }
+                }
+
+                // To test if the characters are only numbers
                 if (token[i].Equals('0') || token[i].Equals('1') || token[i].Equals('2') || token[i].Equals('3') || token[i].Equals('4') || token[i].Equals('5') || token[i].Equals('6') || token[i].Equals('7') || token[i].Equals('8') || token[i].Equals('9'))
                 {
                     isInteger = true;
@@ -279,6 +414,113 @@ namespace LFP_PROYECTO1_Basic_IDE
             }
 
             return isInteger;
+        }
+
+        public bool isDecimal(string token)
+        {
+            bool isDecimal = false;
+            /*String integerPart = "";
+            String fractionalPart = "";
+            bool fractionalTurn = false;*/
+            bool isFirstTime = false;
+
+            if (token.Length > 1)
+            {
+                for (int i = 0; i < token.Length; i++)
+                {
+                    // To test if the first character is '-' or a number and the next character is a number
+                    if (i == 0 && token.Length > 1)
+                    {
+                        if (token[i].Equals('-') || token[i].Equals('0') || token[i].Equals('1') || token[i].Equals('2') || token[i].Equals('3') || token[i].Equals('4') || token[i].Equals('5') || token[i].Equals('6') || token[i].Equals('7') || token[i].Equals('8') || token[i].Equals('9'))
+                        {
+                            if (token[i + 1].Equals('.') || token[i + 1].Equals('0') || token[i + 1].Equals('1') || token[i + 1].Equals('2') || token[i + 1].Equals('3') || token[i + 1].Equals('4') || token[i + 1].Equals('5') || token[i + 1].Equals('6') || token[i + 1].Equals('7') || token[i + 1].Equals('8') || token[i + 1].Equals('9'))
+                            {
+                                isDecimal = true;
+                                continue;
+                            }
+                            else
+                            {
+                                isDecimal = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    // To test if the character meet a Decimal pattern
+                    if (token[i].Equals('.') || token[i].Equals('0') || token[i].Equals('1') || token[i].Equals('2') || token[i].Equals('3') || token[i].Equals('4') || token[i].Equals('5') || token[i].Equals('6') || token[i].Equals('7') || token[i].Equals('8') || token[i].Equals('9'))
+                    {
+                        if (token[i].Equals('.') && i > 0)
+                        {
+                            //fractionalTurn = true;
+                            isFirstTime = !isFirstTime;  // To ensure we have only one point in expression to be decimal
+                            if (isFirstTime == false)
+                            {
+                                isDecimal = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            isDecimal = true;
+                        }
+                    }
+                    else
+                    {
+                        isDecimal = false;
+                        return isDecimal;
+                    }
+                }
+            }
+
+            return isDecimal;
+        }
+
+        public bool isBoolean(string token)
+        {
+            bool isBoolean = false;
+
+            if (token.Length > 1)
+            {
+                if (token == "verdadero" || token == "falso")
+                {
+                    isBoolean = true;
+                    return isBoolean;
+                }
+            }
+
+            return isBoolean;
+        }
+
+        public bool isString(string token)
+        {
+            bool isString = false;
+
+            if (token.Length > 1)
+            {
+                if (closedString == true && token[0] == '"' && token[token.Length - 1] == '"')
+                {
+                    isString = true;
+                    return isString;
+                }
+            }
+
+            return isString;
+        }
+
+        public bool isCharacter(string token)
+        {
+            bool isCharacter = false;
+
+            if (token.Length == 3)
+            {
+                if (token[0] == '\'' && token[token.Length - 1] == '\'')
+                {
+                    isCharacter = true;
+                    return isCharacter;
+                }
+            }
+
+            return isCharacter;
         }
     }
 }

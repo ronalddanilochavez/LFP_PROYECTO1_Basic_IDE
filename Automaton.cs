@@ -1,65 +1,132 @@
-﻿namespace LFP_PROYECTO1_Basic_IDE
+﻿using System;
+
+namespace LFP_PROYECTO1_Basic_IDE
 {
     class Automaton
     {
-        private string[] states { get; set;}
+        public string[] states = new string[0]; // { get; set;}
 
-        private string[] alphabet { get; set; }
+        public string[] alphabet = new string[0]; // { get; set;}
 
-        private string[][] transitionFunction { get; set; }
+        public string[,] transitionFunction = new string[0,0]; // { get; set;}
 
-        private string initialState { get; set; }
+        public string initialState = ""; // { get; set;}
 
-        private string[] finalStates { get; set; }
+        public string[] finalStates = new string[0]; // { get; set;}
 
-        private string nextState (int actualState, int letter, string[][] transitionFunction)
+        public string actualState = "";
+        public string actualLetter = "";
+
+        //**************************************
+
+        public string[] GetStates ()
+        {
+            return states;
+        }
+
+        public void SetStates (string[] myStates)
+        {
+            states = myStates;
+        }
+
+        public string[] GetAlphabet ()
+        {
+            return alphabet;
+        }
+
+        public void SetAlphabet (string[] myAlphabet)
+        {
+            alphabet = myAlphabet;
+        }
+
+        public string[,] GetTransitionFunction ()
+        {
+            return transitionFunction;
+        }
+
+        public void SetTransitionFunction (string[,] myTransitionFunction)
+        {
+            transitionFunction = myTransitionFunction;
+        }
+
+        public string GetInitialState ()
+        {
+            return initialState;
+        }
+
+        public void SetInitialState (string myInitialState)
+        {
+            initialState = myInitialState;
+        }
+
+        public string[] GetFinalStates ()
+        {
+            return finalStates;
+        }
+
+        public void SetFinalStates (string[] myFinalStates)
+        {
+            finalStates = myFinalStates;
+        }
+
+        //**************************************
+
+        public Automaton()
+        {
+
+        }
+
+        //**************************************
+
+        private string nextState (int actualState, int letter, string[,] transitionFunction)
         {
             string nextState = "";
 
-            if (transitionFunction.Length > 0)
+            try
             {
-                for (int i = 0; i < transitionFunction.Length; i++)
+                for (int i = 0; i < transitionFunction.GetLength(0); i++)
                 {
-                    if (transitionFunction[i].Length > 0)
+                    for (int j = 0; j < transitionFunction.GetLength(1); j++)
                     {
-                        for (int j = 0; j < transitionFunction[i].Length; j++)
+                        if (actualState == i && letter == j)
                         {
-                            if (actualState == i && letter == j)
-                            {
-                                nextState = transitionFunction[i][j];
-                            }
+                            nextState = transitionFunction[i, j];
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
             }
 
             return nextState;
         }
 
-        public string AFD (string actualState, string letter, string[] acceptationStates)
+        public string AFD (string actualState, string letter, string[] finalStates)
         {
-            string log = "";
-
             string myNextState = "";
-            if (states.Length > 0)
+
+            try
             {
-                for (int i = 0; i < states.Length; i++)
+                for (int i = 0; i < transitionFunction.GetLength(0); i++)
                 {
-                    if (states[i].Length > 0)
+                    for (int j = 0; j < transitionFunction.GetLength(1); j++)
                     {
-                        for (int j = 0; j < states.Length; i++)
+                        if (states[i] == actualState && alphabet[j] == letter)
                         {
-                            if (states[i] == actualState && alphabet[j] == letter)
-                            {
-                                myNextState = nextState(i, j, transitionFunction);
-                                
-                            }
+                            myNextState = nextState(i, j, transitionFunction);
+                            return myNextState;
                         }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
 
-            return log;
+            return myNextState;
         }
     }
 }

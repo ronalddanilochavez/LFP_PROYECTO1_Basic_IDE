@@ -55,7 +55,6 @@
             this.labelRegularExpressionDefinition = new System.Windows.Forms.Label();
             this.labelRegularExpression = new System.Windows.Forms.Label();
             this.labelEnterLetter = new System.Windows.Forms.Label();
-            this.textBoxEnterLetter = new System.Windows.Forms.TextBox();
             this.labelAutomatonTransitionFunction = new System.Windows.Forms.Label();
             this.labelb = new System.Windows.Forms.Label();
             this.labela = new System.Windows.Forms.Label();
@@ -76,6 +75,8 @@
             this.AutomatonStrings = new System.Windows.Forms.RichTextBox();
             this.AutomatonLog = new System.Windows.Forms.RichTextBox();
             this.buttonReset = new System.Windows.Forms.Button();
+            this.buttonA = new System.Windows.Forms.Button();
+            this.buttonB = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.tabPageIDE.SuspendLayout();
@@ -284,11 +285,12 @@
             // 
             // tabPageAutomaton
             // 
+            this.tabPageAutomaton.Controls.Add(this.buttonB);
+            this.tabPageAutomaton.Controls.Add(this.buttonA);
             this.tabPageAutomaton.Controls.Add(this.buttonReset);
             this.tabPageAutomaton.Controls.Add(this.labelRegularExpressionDefinition);
             this.tabPageAutomaton.Controls.Add(this.labelRegularExpression);
             this.tabPageAutomaton.Controls.Add(this.labelEnterLetter);
-            this.tabPageAutomaton.Controls.Add(this.textBoxEnterLetter);
             this.tabPageAutomaton.Controls.Add(this.labelAutomatonTransitionFunction);
             this.tabPageAutomaton.Controls.Add(this.labelb);
             this.tabPageAutomaton.Controls.Add(this.labela);
@@ -340,19 +342,11 @@
             // 
             this.labelEnterLetter.AutoSize = true;
             this.labelEnterLetter.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelEnterLetter.Location = new System.Drawing.Point(902, 401);
+            this.labelEnterLetter.Location = new System.Drawing.Point(861, 413);
             this.labelEnterLetter.Name = "labelEnterLetter";
             this.labelEnterLetter.Size = new System.Drawing.Size(197, 31);
             this.labelEnterLetter.TabIndex = 24;
             this.labelEnterLetter.Text = "Ingresar Letras";
-            // 
-            // textBoxEnterLetter
-            // 
-            this.textBoxEnterLetter.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxEnterLetter.Location = new System.Drawing.Point(933, 452);
-            this.textBoxEnterLetter.Name = "textBoxEnterLetter";
-            this.textBoxEnterLetter.Size = new System.Drawing.Size(166, 62);
-            this.textBoxEnterLetter.TabIndex = 23;
             // 
             // labelAutomatonTransitionFunction
             // 
@@ -528,7 +522,7 @@
             this.AutomatonStrings.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.AutomatonStrings.Size = new System.Drawing.Size(787, 115);
             this.AutomatonStrings.TabIndex = 4;
-            this.AutomatonStrings.Text = "AABBABBABBBABA";
+            this.AutomatonStrings.Text = "";
             // 
             // AutomatonLog
             // 
@@ -540,7 +534,7 @@
             this.AutomatonLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.AutomatonLog.Size = new System.Drawing.Size(787, 113);
             this.AutomatonLog.TabIndex = 3;
-            this.AutomatonLog.Text = "Test Text";
+            this.AutomatonLog.Text = "";
             // 
             // buttonReset
             // 
@@ -551,6 +545,28 @@
             this.buttonReset.Text = "REINICIAR";
             this.buttonReset.UseVisualStyleBackColor = true;
             this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            // 
+            // buttonA
+            // 
+            this.buttonA.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonA.Location = new System.Drawing.Point(867, 467);
+            this.buttonA.Name = "buttonA";
+            this.buttonA.Size = new System.Drawing.Size(109, 47);
+            this.buttonA.TabIndex = 28;
+            this.buttonA.Text = "a";
+            this.buttonA.UseVisualStyleBackColor = true;
+            this.buttonA.Click += new System.EventHandler(this.buttonA_Click);
+            // 
+            // buttonB
+            // 
+            this.buttonB.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonB.Location = new System.Drawing.Point(990, 467);
+            this.buttonB.Name = "buttonB";
+            this.buttonB.Size = new System.Drawing.Size(109, 47);
+            this.buttonB.TabIndex = 29;
+            this.buttonB.Text = "b";
+            this.buttonB.UseVisualStyleBackColor = true;
+            this.buttonB.Click += new System.EventHandler(this.buttonB_Click);
             // 
             // Form1
             // 
@@ -565,6 +581,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LFP_PROYECTO1_Basic_IDE - 200130586 Ronald Danilo Chávez Calderón";
+            this.Enter += new System.EventHandler(this.Form1_Enter);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.TabControl.ResumeLayout(false);
@@ -622,10 +639,11 @@
         private System.Windows.Forms.Label labelb;
         private System.Windows.Forms.Label labelAutomatonTransitionFunction;
         private System.Windows.Forms.Label labelEnterLetter;
-        private System.Windows.Forms.TextBox textBoxEnterLetter;
         private System.Windows.Forms.Label labelRegularExpressionDefinition;
         private System.Windows.Forms.Label labelRegularExpression;
         private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.Button buttonB;
+        private System.Windows.Forms.Button buttonA;
     }
 }
 

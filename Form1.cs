@@ -16,13 +16,80 @@ namespace LFP_PROYECTO1_Basic_IDE
     {
         private IDE myIDE = new IDE();
 
+        private Automaton myAutomaton = new Automaton();
+        private string[] myStates = { "Q0", "Q1", "Q2" };
+        private string[] myAlphabet = { "a", "b" };
+        private string[,] myTransitionFunction = { {"Q1", "Q2" }, { "Q1", "Q2" }, { "Q1", "Q2" } };
+        private string myInitialState = "Q0";
+        private string[] myFinalStates = { "Q1" };
+
+        private string actualState = "Q0";
+
         // fileProject[0] is the project's file and fileProject[1] is the myIDE's file
         private string[] fileProject = new string[2];
 
         private int letterPos = 0; 
+
+        //***********************************************
         public Form1()
         {
             InitializeComponent();
+
+            // To initialize the automaton object
+            myAutomaton.states = new string[3];
+            myAutomaton.states[0] = "Q0";
+            myAutomaton.states[1] = "Q1";
+            myAutomaton.states[2] = "Q2";
+            myAutomaton.alphabet = new string[2];
+            myAutomaton.alphabet[0] = "a";
+            myAutomaton.alphabet[1] = "b";
+            myAutomaton.transitionFunction = new string[3, 2];
+            myAutomaton.transitionFunction[0, 0] = textBoxQ0a.Text;
+            myAutomaton.transitionFunction[0, 1] = textBoxQ0b.Text;
+            myAutomaton.transitionFunction[1, 0] = textBoxQ1a.Text;
+            myAutomaton.transitionFunction[1, 1] = textBoxQ1b.Text;
+            myAutomaton.transitionFunction[2, 0] = textBoxQ2a.Text;
+            myAutomaton.transitionFunction[2, 1] = textBoxQ2b.Text;
+            myAutomaton.initialState = "Q0";
+            myAutomaton.finalStates = new string[1];
+            myAutomaton.finalStates[0] = "Q1";
+
+            myAutomaton.actualState = "Q0";
+            myAutomaton.actualLetter = "a";
+
+            // To clear the text
+            AutomatonLog.Clear();
+            AutomatonStrings.Clear();
+        }
+
+        public void start (string[] args)
+        {
+            // To initialize the automaton object
+            myAutomaton.states = new string[3];
+            myAutomaton.states[0] = "Q0";
+            myAutomaton.states[1] = "Q1";
+            myAutomaton.states[2] = "Q2";
+            myAutomaton.alphabet = new string[2];
+            myAutomaton.alphabet[0] = "a";
+            myAutomaton.alphabet[1] = "b";
+            myAutomaton.transitionFunction = new string[3,2];
+            myAutomaton.transitionFunction[0,0] = textBoxQ0a.Text;
+            myAutomaton.transitionFunction[0,1] = textBoxQ0b.Text;
+            myAutomaton.transitionFunction[1,0] = textBoxQ1a.Text;
+            myAutomaton.transitionFunction[1,1] = textBoxQ1b.Text;
+            myAutomaton.transitionFunction[2,0] = textBoxQ2a.Text;
+            myAutomaton.transitionFunction[2,1] = textBoxQ2b.Text;
+            myAutomaton.initialState = "Q0";
+            myAutomaton.finalStates = new string[1];
+            myAutomaton.finalStates[0] = "Q1";
+
+            myAutomaton.actualState = "Q0";
+            myAutomaton.actualLetter = "a";
+
+            // To clear the text
+            AutomatonLog.Clear();
+            AutomatonLog.AppendText("\n" + "Q0" + " Estado inicial");
+            AutomatonStrings.Clear();
         }
 
         public static Color[] ParseString(string raw)
@@ -137,9 +204,108 @@ namespace LFP_PROYECTO1_Basic_IDE
 
         private void buttonReset_Click(object sender, EventArgs e)
         {
+            // To initialize the automaton object
+            myAutomaton.states = new string[3];
+            myAutomaton.states[0] = "Q0";
+            myAutomaton.states[1] = "Q1";
+            myAutomaton.states[2] = "Q2";
+            myAutomaton.alphabet = new string[2];
+            myAutomaton.alphabet[0] = "a";
+            myAutomaton.alphabet[1] = "b";
+            myAutomaton.transitionFunction = new string[3, 2];
+            myAutomaton.transitionFunction[0,0] = textBoxQ0a.Text;
+            myAutomaton.transitionFunction[0,1] = textBoxQ0b.Text;
+            myAutomaton.transitionFunction[1,0] = textBoxQ1a.Text;
+            myAutomaton.transitionFunction[1,1] = textBoxQ1b.Text;
+            myAutomaton.transitionFunction[2,0] = textBoxQ2a.Text;
+            myAutomaton.transitionFunction[2,1] = textBoxQ2b.Text;
+            myAutomaton.initialState = "Q0";
+            myAutomaton.finalStates = new string[1];
+            myAutomaton.finalStates[0] = "Q1";
 
+            myAutomaton.actualState = "Q0";
+            myAutomaton.actualLetter = "a";
+
+            // To clear the text
+            AutomatonLog.Clear();
+            AutomatonLog.AppendText("\n" + "Q0" + " Estado inicial");
+            AutomatonStrings.Clear();
         }
 
+        private void buttonA_Click(object sender, EventArgs e)
+        {
+            myAutomaton.actualLetter = "a";
+            string myNextState = myAutomaton.AFD(myAutomaton.actualState, myAutomaton.actualLetter, myAutomaton.finalStates);
 
+            // When reaches the acceptation state
+            for (int i = 0; i < myAutomaton.finalStates.Length; i++)
+            {
+                if (myNextState == myAutomaton.finalStates[i])
+                {
+                    myAutomaton.actualState = myNextState;
+                    AutomatonLog.AppendText("\n" + myNextState + " Estado de Aceptación");
+                    AutomatonStrings.AppendText(myAutomaton.actualLetter);
+                    return;
+                }
+            }
+
+            // When do not reaches the acceptation state
+            myAutomaton.actualState = myNextState;
+            AutomatonLog.AppendText("\n" + myNextState + " Estado de NO Aceptación");
+            AutomatonStrings.AppendText(myAutomaton.actualLetter);
+        }
+
+        private void buttonB_Click(object sender, EventArgs e)
+        {
+            myAutomaton.actualLetter = "b";
+            string myNextState = myAutomaton.AFD(myAutomaton.actualState, myAutomaton.actualLetter, myAutomaton.finalStates);
+
+            // When reaches the acceptation state
+            for (int i = 0; i < myAutomaton.finalStates.Length; i++)
+            {
+                if (myNextState == myAutomaton.finalStates[i])
+                {
+                    myAutomaton.actualState = myNextState;
+                    AutomatonLog.AppendText("\n" + myNextState + " Estado de Aceptación");
+                    AutomatonStrings.AppendText(myAutomaton.actualLetter);
+                    return;
+                }
+            }
+
+            // When do not reaches the acceptation state
+            myAutomaton.actualState = myNextState;
+            AutomatonLog.AppendText("\n" + myNextState + " Estado de NO Aceptación");
+            AutomatonStrings.AppendText(myAutomaton.actualLetter);
+        }
+
+        private void Form1_Enter(object sender, EventArgs e)
+        {
+            // To initialize the automaton object
+            myAutomaton.states = new string[3];
+            myAutomaton.states[0] = "Q0";
+            myAutomaton.states[1] = "Q1";
+            myAutomaton.states[2] = "Q2";
+            myAutomaton.alphabet = new string[2];
+            myAutomaton.alphabet[0] = "a";
+            myAutomaton.alphabet[1] = "b";
+            myAutomaton.transitionFunction = new string[3, 2];
+            myAutomaton.transitionFunction[0, 0] = textBoxQ0a.Text;
+            myAutomaton.transitionFunction[0, 1] = textBoxQ0b.Text;
+            myAutomaton.transitionFunction[1, 0] = textBoxQ1a.Text;
+            myAutomaton.transitionFunction[1, 1] = textBoxQ1b.Text;
+            myAutomaton.transitionFunction[2, 0] = textBoxQ2a.Text;
+            myAutomaton.transitionFunction[2, 1] = textBoxQ2b.Text;
+            myAutomaton.initialState = "Q0";
+            myAutomaton.finalStates = new string[1];
+            myAutomaton.finalStates[0] = "Q1";
+
+            myAutomaton.actualState = "Q0";
+            myAutomaton.actualLetter = "a";
+
+            // To clear the text
+            AutomatonLog.Clear();
+            AutomatonLog.AppendText("\n" + "Q0" + " Estado inicial");
+            AutomatonStrings.Clear();
+        }
     }
 }

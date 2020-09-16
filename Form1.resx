@@ -120,6 +120,62 @@
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="Language.Text" xml:space="preserve">
+    <value>Tipos (Azul):
+	entero
+	decimal
+	cadena
+	booleano
+	caracter
+
+Operadores Aritméticos (Azul):
+	+ - * / ++ --
+
+Operadores Relacionales (Azul):
+	&gt; &lt; &gt;= &lt;= == !=
+
+Operadores Lógicos (Azul):
+	|| &amp;&amp; !
+
+Signos de Agrupación (Azul):
+	()
+
+Asignación y Fin de Sentencia (Rosado):
+	= ;
+
+Comentarios (Rojo):
+	// /* */
+
+Palabras Reservadas (Verde):
+	SI SINO FIN_SI
+	EN_CASO CASO: OTRO CASO: FIN_CASO
+	SEA
+	PARA DESDE HASTA HACER FIN_PARA
+	MIENTRAS FIN_MIENTRAS
+	INCREMENTO
+	REINICIAR CICLO
+	TERMINAR CICLO
+
+Estructuras:
+	SI (condición) HACER
+	SINO
+	FIN_SI
+
+	EN_CASO (variable)
+	CASO:
+	CASO:
+	OTRO CASO:
+	FIN_CASO
+
+	PARA DESDE entero HASTA entero HACER
+	FIN_PARA
+
+	MIENTRAS (condición) HACER
+	FIN_MIENTRAS
+
+	REINICIAR CICLO
+	TERMINAR CICLO</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -21,13 +21,52 @@ namespace LFP_PROYECTO1_Basic_IDE
         private string[] grayTokens = { "cadena" };
         private string[] orangeTokens = { "booleano" };
         private string[] brownTokens = { "caracter" };
+        
+        // 1 character
+        private string[] tokensPink1 = { "=", ";" };
+        private string[] tokensBlue1 = { "+", "-", "*", "/", ">", "<", "!", "(", ")" };
+        // 2 characters
+        private string[] tokensBlue2 = { "++", "--", ">=", "<=", "==", "!=", "||", "&&" };
+        private string[] tokensGreen2 = { "SI" };
+        // 4 characters
+        private string[] tokensGreen4 = { "SINO", "SEA:", "PARA" };
+        // 5 characters
+        private string[] tokensGreen5 = { "CASO:", "HACER", "DESDE", "HASTA" };
+        // 6 characters
+        private string[] tokensGreen6 = { "FIN_SI" };
+        private string[] tokensPurple6 = { "entero" };
+        private string[] tokensGray6 = { "cadena" };
+        // 7 characters
+        private string[] tokensGreen7 = { "SINO_SI", "EN_CASO" };
+        private string[] tokensCyan7 = { "decimal" };
+        // 8 characters
+        private string[] tokensGreen8 = { "FIN_CASO", "FIN_PARA", "MIENTRAS",  };
+        private string[] tokensOrange8 = { "booleano" };
+        private string[] tokensBrown8 = { "caracter" };
+        // 10 characters
+        private string[] tokensGreen10 = { "OTRO CASO:", "INCREMENTO" };
+        // 12 characters
+        private string[] tokensGreen12 = { "FIN_MIENTRAS"};
+        // 14 characters
+        private string[] tokensGreen14 = { "TERMINAR CICLO" };
+        // 15 characters
+        private string[] tokensGreen15 = { "REINICIAR CICLO" };
+
 
         private bool closedString = true;
+        private int stringStart = 0;
 
         private bool closedLongCommentary = true;
         private bool closedShortCommentary = true;
 
-        public string tokenList = "**************************************";
+        public string tokenList = "********Think Outside the BOX********";
+
+        private int stringLength = 0;
+        private bool isStringIncreasing = false;
+        public int row = 1;
+        public int column = 0;
+        private int lineFirstIndex = 0;
+        private int lineLastIndex = 0;
 
         // !
         public void colorString(int start, int length, Color color, RichTextBox myRichTextBox)
@@ -37,7 +76,7 @@ namespace LFP_PROYECTO1_Basic_IDE
             myRichTextBox.SelectionColor = color;
         }
 
-        // !
+        // !*
         public void checkKeyword(string word, Color color, int startIndex, RichTextBox rtb
             )
         {
@@ -56,7 +95,7 @@ namespace LFP_PROYECTO1_Basic_IDE
             }
         }
 
-        // !
+        // !*
         public int checkKeyword2(string word, Color color, int startIndex, RichTextBox rtb
             )
         {
@@ -71,7 +110,7 @@ namespace LFP_PROYECTO1_Basic_IDE
             return startIndex + word.Length;
         }
 
-        // !
+        // !*
         public void checkKeyword3(string word, Color color, RichTextBox rtb)
         {
             if (rtb.Text.Contains(word))
@@ -126,6 +165,53 @@ namespace LFP_PROYECTO1_Basic_IDE
         {
             string word = "";
 
+            // To know if the string is increasing or decreasing
+            if (rtb.Text.Length > stringLength)
+            {
+                isStringIncreasing = true;
+                stringLength = rtb.Text.Length;
+            }
+            else
+            {
+                isStringIncreasing = false;
+                stringLength = rtb.Text.Length;
+            }
+
+            // To know the number of rows
+            try
+            {
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == true)
+                {
+                    row++;
+                }
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == false)
+                {
+                    row--;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            try
+            {
+                lineLastIndex = rtb.Text.Length - 1;
+                for (int i = rtb.Text.Length - 1; i > 0; i--)
+                {
+                    if (rtb.Text[i] == '\n')
+                    {
+                        lineFirstIndex = i + 1;
+                        break;
+                    }
+                }
+                column = lineLastIndex - lineFirstIndex + 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
             // When open a string
             if (rtb.Text.Length >= 1)
             {
@@ -135,108 +221,250 @@ namespace LFP_PROYECTO1_Basic_IDE
                 }
             }
 
+            string token = "";
+
+            //****************
             // To find the main tokens
             for (int i = (rtb.Text.Length - 1); i >= 0; i--)
             {
                 word = Convert.ToString(rtb.Text[i]) + word;
 
-                // { "=",";"}
-                for (int k = 0; k < pinkTokens.Length; k++)
-                {
-                    if (word == pinkTokens[k] && rtb.Text[rtb.Text.Length - 2] != '=' && rtb.Text[rtb.Text.Length - 2] != '!' && rtb.Text[rtb.Text.Length - 2] != '>' && rtb.Text[rtb.Text.Length - 2] != '<')
-                    {
-                        colorText(word, rtb.Text.Length - pinkTokens[k].Length, Color.Magenta, Color.Black, rtb);
-                        tokenList += "\nNuevo Token = " + word; 
-                    }
-                }
-
-                // {"+","-","*","/","++","--",">","<",">=","<=","==","!=","||","&&","!","(",")"}
-                for (int k = 0; k < bLueTokens.Length; k++)
-                {
-                    if (word == bLueTokens[k] /*&& rtb.Text[rtb.Text.Length - 2] != '/' && rtb.Text[rtb.Text.Length - 1] != '*'*/)
-                    {
-                        colorText(word, rtb.Text.Length - bLueTokens[k].Length, Color.Blue, Color.Black, rtb);
-                        tokenList += "\nNuevo Token = " + word;
-                    }
-                }
-
-                // { "SI", "SINO","FIN_SI","SINO_SI","EN_CASO","CASO:","OTRO CASO:","SEA:","FIN_CASO", "PARA","FIN_PARA","MIENTRAS","FIN_MIENTRAS","HACER","DESDE","HASTA","INCREMENTO","REINICIAR CICLO","TERMINAR CICLO"}
-                for (int k = 0; k < greenTokens.Length; k++)
-                {
-                    if (word == greenTokens[k])
-                    {
-                        colorText(word, rtb.Text.Length - greenTokens[k].Length, Color.Green, Color.Black, rtb);
-                        tokenList += "\nNuevo Token = " + word;
-                    }
-                }
-
                 //////////////////////////////////////////////
 
-
-                if (word == "entero")
+                if (closedShortCommentary == true && closedLongCommentary == true)
                 {
-                    colorText(word, rtb.Text.Length - 6, Color.Purple, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                }
 
-                if (word == "decimal")
-                {
-                    colorText(word, rtb.Text.Length - 7, Color.Cyan, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                }
+                    // 1 character length
+                    if (word.Length == 1)
+                    {
+                        for (int k = 0; k < tokensPink1.Length; k++)
+                        {
+                            if (word == tokensPink1[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensPink1[k].Length, Color.Magenta, Color.Black, rtb);
+                            }
+                        }
 
-                if (word == "cadena")
-                {
-                    colorText(word, rtb.Text.Length - 6, Color.Gray, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                }
+                        for (int k = 0; k < tokensBlue1.Length; k++)
+                        {
+                            if (word == tokensBlue1[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensBlue1[k].Length, Color.Blue, Color.Black, rtb);
+                            }
+                        }
+                    }
 
-                if (word == "booleano")
-                {
-                    colorText(word, rtb.Text.Length - 8, Color.Orange, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                }
+                    // 2 characters length
+                    if (word.Length == 2)
+                    {
+                        for (int k = 0; k < tokensBlue2.Length; k++)
+                        {
+                            if (word == tokensBlue2[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensBlue2[k].Length, Color.Blue, Color.Black, rtb);
+                            }
+                        }
 
-                if (word == "caracter")
-                {
-                    colorText(word, rtb.Text.Length - 8, Color.Brown, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                }
+                        for (int k = 0; k < tokensGreen2.Length; k++)
+                        {
+                            if (word == tokensGreen2[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen2[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
 
-                //////////////////////////////////////////////
+                    // 4 characters length
+                    if (word.Length == 4)
+                    {
+                        for (int k = 0; k < tokensGreen4.Length; k++)
+                        {
+                            if (word == tokensGreen4[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen4[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
 
-                // Testing if a word is decimal before integer
-                if (isDecimal(word))
-                {
-                    colorText(word, rtb.Text.Length - word.Length, Color.Cyan, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                }
+                    // 5 characters length
+                    if (word.Length == 5)
+                    {
+                        for (int k = 0; k < tokensGreen5.Length; k++)
+                        {
+                            if (word == tokensGreen5[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen5[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
 
-                // Testing if a word is integer after decimal
-                if (isInteger(word))
-                {
-                    colorText(word, rtb.Text.Length - word.Length, Color.Purple, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                }
+                    // 6 characters length
+                    if (word.Length == 6)
+                    {
+                        for (int k = 0; k < tokensGreen6.Length; k++)
+                        {
+                            if (word == tokensGreen6[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen6[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
 
-                if (isBoolean(word))
-                {
-                    colorText(word, rtb.Text.Length - word.Length, Color.Orange, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                    return rtb.Text.Length;
-                }
+                        for (int k = 0; k < tokensPurple6.Length; k++)
+                        {
+                            if (word == tokensPurple6[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensPurple6[k].Length, Color.Purple, Color.Black, rtb);
+                            }
+                        }
 
-                if ( closedString == true && isString(word))
-                {
-                    colorText(word, rtb.Text.Length - word.Length, Color.Gray, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
-                    break;
-                }
+                        for (int k = 0; k < tokensGray6.Length; k++)
+                        {
+                            if (word == tokensGray6[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGray6[k].Length, Color.Gray, Color.Black, rtb);
+                            }
+                        }
+                    }
 
-                if (isCharacter(word))
-                {
-                    colorText(word, rtb.Text.Length - word.Length, Color.Brown, Color.Black, rtb);
-                    tokenList += "\nNuevo Token = " + word;
+                    // 7 characters length
+                    if (word.Length == 7)
+                    {
+                        for (int k = 0; k < tokensGreen7.Length; k++)
+                        {
+                            if (word == tokensGreen7[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen7[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensCyan7.Length; k++)
+                        {
+                            if (word == tokensCyan7[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensCyan7[k].Length, Color.Cyan, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 8 characters length
+                    if (word.Length == 8)
+                    {
+                        for (int k = 0; k < tokensGreen8.Length; k++)
+                        {
+                            if (word == tokensGreen8[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen8[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensOrange8.Length; k++)
+                        {
+                            if (word == tokensOrange8[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensOrange8[k].Length, Color.Orange, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensBrown8.Length; k++)
+                        {
+                            if (word == tokensBrown8[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensBrown8[k].Length, Color.Orange, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 10 characters length
+                    if (word.Length == 10)
+                    {
+                        for (int k = 0; k < tokensGreen10.Length; k++)
+                        {
+                            if (word == tokensGreen10[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen10[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 12 characters length
+                    if (word.Length == 12)
+                    {
+                        for (int k = 0; k < tokensGreen12.Length; k++)
+                        {
+                            if (word == tokensGreen12[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen12[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 14 characters length
+                    if (word.Length == 14)
+                    {
+                        for (int k = 0; k < tokensGreen14.Length; k++)
+                        {
+                            if (word == tokensGreen14[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen14[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 15 characters length
+                    if (word.Length == 15)
+                    {
+                        for (int k = 0; k < tokensGreen15.Length; k++)
+                        {
+                            if (word == tokensGreen15[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen15[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    //////////////////////////////////////////////
+
+                    // Testing if a word is boolean
+                    if (isBoolean(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Orange, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                        break;
+                    }
+
+                    // Testing if a word is string
+                    if (closedString == false /*&& isString(word)*/)
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Gray, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                        break;
+                    }
+
+                    // Testing if a word is character
+                    if (isCharacter(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Brown, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                    }
+
+                    // Testing if a word is decimal before integer
+                    if (isDecimal(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Cyan, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                    }
+
+                    // Testing if a word is integer after decimal
+                    if (isInteger(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Purple, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                    }
 
                 }
 
@@ -248,14 +476,11 @@ namespace LFP_PROYECTO1_Basic_IDE
                     closedShortCommentary = false;
                     colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Red, rtb);
                 }
-                if (word.Length >= 2)
+                if (word.Length >= 2 && closedShortCommentary == false && word[0] == '/' && word[1] == '/' && word[word.Length - 1] == '\n')
                 {
-                    if (closedShortCommentary == false && word[0] == '/' && word[1] == '/' && word[word.Length - 1] == '\n')
-                    {
-                        colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
-                        closedShortCommentary = true;
-                        break;
-                    }
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
+                    closedShortCommentary = true;
+                    break;
                 }
 
                 // To paint the long commentary between /*....*/
@@ -263,23 +488,22 @@ namespace LFP_PROYECTO1_Basic_IDE
                 {
                     closedLongCommentary = false;
                     colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Red, rtb);
+                    break;
                 }
-                if (word.Length >= 4)
+                if (closedLongCommentary == false && word == "*/")
                 {
-                    if (closedLongCommentary == false && word[0] == '/' && word[1] == '*' && word[word.Length - 2] == '*' && word[word.Length - 1] == '/')
-                    {
-                        colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
-                        closedLongCommentary = true;
-                        break;
-                    }
+
+                    closedLongCommentary = true;
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
+                    break;
                 }
 
                 //////////////////////////////////////////////
 
                 // This limits the maximun length of "word"
-                if (i == rtb.Text.Length - 500)
+                if (i == lineFirstIndex)
                 {
-                    return rtb.Text.Length;
+                    break;
                 }
 
                 // This limits the word to the size of the actual line
@@ -292,8 +516,340 @@ namespace LFP_PROYECTO1_Basic_IDE
             return rtb.Text.Length;
         }
 
-        // !
-        public string tokenLog(string text)
+
+        public string compile(string text)
+        {
+            string tokenLog = "********Think Outside the BOX********";
+            string line = "";
+            string word = "";
+            string tempText = "";
+            string token = "";
+            string tokenTemp = "";
+            int start = 0;
+            bool isLongComment = false;
+            bool isShortComment = false;
+
+            // To process the commentaries we cut off the characters enclosed inside it and we only left the '\n' characters
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (i + 1 < text.Length )
+                {
+                    if (isLongComment == false && text[i] == '/' && text[i + 1] == '/')
+                    {
+                        isShortComment = true;
+                    }
+
+                    if (isShortComment == false && text[i] == '/' && text[i + 1] == '*')
+                    {
+                        isLongComment = true;
+                    }
+
+                    if (isLongComment == true && text[i] == '*' && text[i + 1] == '/')
+                    {
+                        isLongComment = false;
+
+                        if (i + 2 < text.Length)
+                        {
+                            i += 2;
+                        }
+                        else
+                        {
+                            // Here the text ends if i + 2 == text.length and we dont need the reading of */
+                            break;
+                        }
+                    }
+                }
+
+                if (isShortComment == false && isLongComment == false)
+                {
+                    tempText += Convert.ToString(text[i]);
+                    continue;
+                }
+
+                if (text[i] == '\n')
+                {
+                    isShortComment = false;
+                    tempText += Convert.ToString(text[i]);
+                    continue;
+                }
+            }
+
+            for (int i = 0; i < tempText.Length; i++)
+            {
+                // We find a line to work with
+                if (tempText[i] != '\n' && i != tempText.Length - 1)
+                {
+                    line += Convert.ToString(tempText[i]);
+                }
+                else
+                {
+                    // If we are in text.Length - 1 index
+                    if (i == tempText.Length - 1)
+                    {
+                        line += Convert.ToString(tempText[i]);
+                    }
+
+                    start = 0;
+
+                    while (start < line.Length)
+                    {
+                        word = "";
+                        token = "";
+
+                        for (int j = start; j < line.Length; j++)
+                        {
+                            word += Convert.ToString(line[j]);
+
+                            // Defined tokens
+                            // Needed, because compareToDefinedTokens erases tokenTemp if is not a defined token
+                            if ((tokenTemp = compareToDefinedTokens(word)).Length > 0)
+                            {
+                                token = tokenTemp;
+                            }
+
+                            // To test if is a boolean type
+                            if (isBoolean(word))
+                            {
+                                token = word;
+                            }
+                            // To test if is a string type
+                            if (isString(word))
+                            {
+                                token = word;
+                            }
+                            // To test if is a character type
+                            if (isCharacter(word))
+                            {
+                                token = word;
+                            }
+                            // To test if is a decimal type, we need to test decimal before integer
+                            if (isDecimal(word))
+                            {
+                                token = word;
+                            }
+                            // To test if is an integer type
+                            if (isInteger(word))
+                            {
+                                token = word;
+                            }
+                        }
+
+                        if (token.Length > 0)
+                        {
+                            tokenLog += "\nToken = \"" + token + "\"";
+                            start += token.Length; 
+                        }
+                        else
+                        {
+                            start++;
+                        }
+                    }
+
+                    start = 0;
+                    line = "";
+                }
+            }
+
+            return tokenLog;
+        }
+
+        private string compareToDefinedTokens(string word)
+        {
+            string token = "";
+
+            // 1 character length
+            if (word.Length == 1)
+            {
+                for (int k = 0; k < tokensPink1.Length; k++)
+                {
+                    if (word == tokensPink1[k])
+                    {
+                        token = word;
+                    }
+                }
+
+                for (int k = 0; k < tokensBlue1.Length; k++)
+                {
+                    if (word == tokensBlue1[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 2 characters length
+            if (word.Length == 2)
+            {
+                for (int k = 0; k < tokensBlue2.Length; k++)
+                {
+                    if (word == tokensBlue2[k])
+                    {
+                        token = word;
+                    }
+                }
+
+                for (int k = 0; k < tokensGreen2.Length; k++)
+                {
+                    if (word == tokensGreen2[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 4 characters length
+            if (word.Length == 4)
+            {
+                for (int k = 0; k < tokensGreen4.Length; k++)
+                {
+                    if (word == tokensGreen4[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 5 characters length
+            if (word.Length == 5)
+            {
+                for (int k = 0; k < tokensGreen5.Length; k++)
+                {
+                    if (word == tokensGreen5[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 6 characters length
+            if (word.Length == 6)
+            {
+                for (int k = 0; k < tokensGreen6.Length; k++)
+                {
+                    if (word == tokensGreen6[k])
+                    {
+                        token = word;
+                    }
+                }
+
+                for (int k = 0; k < tokensPurple6.Length; k++)
+                {
+                    if (word == tokensPurple6[k])
+                    {
+                        token = word;
+                    }
+                }
+
+                for (int k = 0; k < tokensGray6.Length; k++)
+                {
+                    if (word == tokensGray6[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 7 characters length
+            if (word.Length == 7)
+            {
+                for (int k = 0; k < tokensGreen7.Length; k++)
+                {
+                    if (word == tokensGreen7[k])
+                    {
+                        token = word;
+                    }
+                }
+
+                for (int k = 0; k < tokensCyan7.Length; k++)
+                {
+                    if (word == tokensCyan7[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 8 characters length
+            if (word.Length == 8)
+            {
+                for (int k = 0; k < tokensGreen8.Length; k++)
+                {
+                    if (word == tokensGreen8[k])
+                    {
+                        token = word;
+                    }
+                }
+
+                for (int k = 0; k < tokensOrange8.Length; k++)
+                {
+                    if (word == tokensOrange8[k])
+                    {
+                        token = word;
+                    }
+                }
+
+                for (int k = 0; k < tokensBrown8.Length; k++)
+                {
+                    if (word == tokensBrown8[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 10 characters length
+            if (word.Length == 10)
+            {
+                for (int k = 0; k < tokensGreen10.Length; k++)
+                {
+                    if (word == tokensGreen10[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 12 characters length
+            if (word.Length == 12)
+            {
+                for (int k = 0; k < tokensGreen12.Length; k++)
+                {
+                    if (word == tokensGreen12[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 14 characters length
+            if (word.Length == 14)
+            {
+                for (int k = 0; k < tokensGreen14.Length; k++)
+                {
+                    if (word == tokensGreen14[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            // 15 characters length
+            if (word.Length == 15)
+            {
+                for (int k = 0; k < tokensGreen15.Length; k++)
+                {
+                    if (word == tokensGreen15[k])
+                    {
+                        token = word;
+                    }
+                }
+            }
+
+            return token;
+        }
+
+            //
+            public string tokenLog(string text)
         {
             string tokenList = "";
             string word = "";
@@ -314,7 +870,7 @@ namespace LFP_PROYECTO1_Basic_IDE
             return tokenList;
         }
 
-        // !
+        // !*
         public void processFile(string text, RichTextBox rtb)
         {
             string word = "";
@@ -381,7 +937,8 @@ namespace LFP_PROYECTO1_Basic_IDE
 
             return numberRow;
         }
-        public bool isInteger(String token)
+
+        public bool isInteger(string token)
         {
             bool isInteger = false;
 
@@ -499,12 +1056,21 @@ namespace LFP_PROYECTO1_Basic_IDE
         {
             bool isString = false;
 
-            if (token.Length > 1)
+            if (token[0] == '"' && token[token.Length - 1] == '"' && (token.Length - 1) != 0)
             {
-                if (closedString == true && token[0] == '"' && token[token.Length - 1] == '"')
+                for (int i = 1; i < token.Length; i++)
                 {
-                    isString = true;
-                    return isString;
+                    if (token[i] == '"')
+                    {
+                        if (i == token.Length - 1)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
 

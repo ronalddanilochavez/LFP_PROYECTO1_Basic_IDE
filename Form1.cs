@@ -135,7 +135,8 @@ namespace LFP_PROYECTO1_Basic_IDE
             //myIDE.processFile(myIDELexer.Text, myIDELexer);
 
             // To see the row and column
-            RowColumn.Text = myIDE.cursorRowPosition(IDELexer) + "," + myIDE.cursorColumnPosition(IDELexer);
+            //RowColumn.Text = myIDE.cursorRowPosition(IDELexer) + "," + myIDE.cursorColumnPosition(IDELexer);
+            RowColumn.Text = myIDE.row + "," + myIDE.column;
 
             // To log the tokens found
             Log.Text = myIDE.tokenList;
@@ -228,7 +229,7 @@ namespace LFP_PROYECTO1_Basic_IDE
 
             // To clear the text
             AutomatonLog.Clear();
-            AutomatonLog.AppendText("\n" + "Q0" + " Estado inicial");
+            AutomatonLog.AppendText("********Think Outside the BOX *********" + "\n" + "Q0" + " Estado inicial");
             AutomatonStrings.Clear();
         }
 
@@ -242,17 +243,29 @@ namespace LFP_PROYECTO1_Basic_IDE
             {
                 if (myNextState == myAutomaton.finalStates[i])
                 {
+                    AutomatonLog.AppendText("\n" + "d(" + myAutomaton.actualState + "," + myAutomaton.actualLetter + ") = " + myNextState + " Estado de aceptación");
                     myAutomaton.actualState = myNextState;
-                    AutomatonLog.AppendText("\n" + myNextState + " Estado de Aceptación");
                     AutomatonStrings.AppendText(myAutomaton.actualLetter);
                     return;
                 }
             }
 
-            // When do not reaches the acceptation state
+            // When reaches the NO acceptation state
+            for (int i = 0; i < myAutomaton.states.Length; i++)
+            {
+                if (myNextState == myAutomaton.states[i])
+                {
+                    AutomatonLog.AppendText("\n" + "d(" + myAutomaton.actualState + "," + myAutomaton.actualLetter + ") = " + myNextState + " Estado de NO aceptación");
+                    myAutomaton.actualState = myNextState;
+                    AutomatonStrings.AppendText(myAutomaton.actualLetter);
+                    return;
+                }
+            }
+
+            // When there is not an state
+            AutomatonLog.AppendText("\nNo hay estado");
             myAutomaton.actualState = myNextState;
-            AutomatonLog.AppendText("\n" + myNextState + " Estado de NO Aceptación");
-            AutomatonStrings.AppendText(myAutomaton.actualLetter);
+            AutomatonStrings.AppendText("");
         }
 
         private void buttonB_Click(object sender, EventArgs e)
@@ -265,17 +278,29 @@ namespace LFP_PROYECTO1_Basic_IDE
             {
                 if (myNextState == myAutomaton.finalStates[i])
                 {
+                    AutomatonLog.AppendText("\n" + "d(" + myAutomaton.actualState + "," + myAutomaton.actualLetter + ") = " + myNextState + " Estado de aceptación");
                     myAutomaton.actualState = myNextState;
-                    AutomatonLog.AppendText("\n" + myNextState + " Estado de Aceptación");
                     AutomatonStrings.AppendText(myAutomaton.actualLetter);
                     return;
                 }
             }
 
-            // When do not reaches the acceptation state
+            // When reaches the NO acceptation state
+            for (int i = 0; i < myAutomaton.states.Length; i++)
+            {
+                if (myNextState == myAutomaton.states[i])
+                {
+                    AutomatonLog.AppendText("\n" + "d(" + myAutomaton.actualState + "," + myAutomaton.actualLetter + ") = " + myNextState + " Estado de NO aceptación");
+                    myAutomaton.actualState = myNextState;
+                    AutomatonStrings.AppendText(myAutomaton.actualLetter);
+                    return;
+                }
+            }
+
+            // When there is not an state
+            AutomatonLog.AppendText("\nNo hay estado");
             myAutomaton.actualState = myNextState;
-            AutomatonLog.AppendText("\n" + myNextState + " Estado de NO Aceptación");
-            AutomatonStrings.AppendText(myAutomaton.actualLetter);
+            AutomatonStrings.AppendText("");
         }
 
         private void Form1_Enter(object sender, EventArgs e)
@@ -306,6 +331,11 @@ namespace LFP_PROYECTO1_Basic_IDE
             AutomatonLog.Clear();
             AutomatonLog.AppendText("\n" + "Q0" + " Estado inicial");
             AutomatonStrings.Clear();
+        }
+
+        private void ButtonCompile_Click(object sender, EventArgs e)
+        {
+            Log.Text = myIDE.compile(IDELexer.Text);
         }
     }
 }

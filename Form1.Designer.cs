@@ -52,6 +52,9 @@
             this.RowColumn = new System.Windows.Forms.Label();
             this.IDELexer = new System.Windows.Forms.RichTextBox();
             this.tabPageAutomaton = new System.Windows.Forms.TabPage();
+            this.buttonB = new System.Windows.Forms.Button();
+            this.buttonA = new System.Windows.Forms.Button();
+            this.buttonReset = new System.Windows.Forms.Button();
             this.labelRegularExpressionDefinition = new System.Windows.Forms.Label();
             this.labelRegularExpression = new System.Windows.Forms.Label();
             this.labelEnterLetter = new System.Windows.Forms.Label();
@@ -74,9 +77,6 @@
             this.labelAutomatonDefinition = new System.Windows.Forms.Label();
             this.AutomatonStrings = new System.Windows.Forms.RichTextBox();
             this.AutomatonLog = new System.Windows.Forms.RichTextBox();
-            this.buttonReset = new System.Windows.Forms.Button();
-            this.buttonA = new System.Windows.Forms.Button();
-            this.buttonB = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.tabPageIDE.SuspendLayout();
@@ -248,6 +248,7 @@
             this.ButtonCompile.TabIndex = 3;
             this.ButtonCompile.Text = "COMPILAR";
             this.ButtonCompile.UseVisualStyleBackColor = true;
+            this.ButtonCompile.Click += new System.EventHandler(this.ButtonCompile_Click);
             // 
             // Log
             // 
@@ -259,7 +260,7 @@
             this.Log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.Log.Size = new System.Drawing.Size(699, 128);
             this.Log.TabIndex = 2;
-            this.Log.Text = "";
+            this.Log.Text = "********Think Outside the BOX********";
             // 
             // RowColumn
             // 
@@ -267,9 +268,9 @@
             this.RowColumn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RowColumn.Location = new System.Drawing.Point(17, 296);
             this.RowColumn.Name = "RowColumn";
-            this.RowColumn.Size = new System.Drawing.Size(86, 16);
+            this.RowColumn.Size = new System.Drawing.Size(25, 16);
             this.RowColumn.TabIndex = 1;
-            this.RowColumn.Text = "Row, Column";
+            this.RowColumn.Text = "0 0";
             // 
             // IDELexer
             // 
@@ -317,6 +318,38 @@
             this.tabPageAutomaton.TabIndex = 1;
             this.tabPageAutomaton.Text = "Autómata AFD";
             this.tabPageAutomaton.UseVisualStyleBackColor = true;
+            // 
+            // buttonB
+            // 
+            this.buttonB.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonB.Location = new System.Drawing.Point(990, 467);
+            this.buttonB.Name = "buttonB";
+            this.buttonB.Size = new System.Drawing.Size(109, 47);
+            this.buttonB.TabIndex = 29;
+            this.buttonB.Text = "b";
+            this.buttonB.UseVisualStyleBackColor = true;
+            this.buttonB.Click += new System.EventHandler(this.buttonB_Click);
+            // 
+            // buttonA
+            // 
+            this.buttonA.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonA.Location = new System.Drawing.Point(867, 467);
+            this.buttonA.Name = "buttonA";
+            this.buttonA.Size = new System.Drawing.Size(109, 47);
+            this.buttonA.TabIndex = 28;
+            this.buttonA.Text = "a";
+            this.buttonA.UseVisualStyleBackColor = true;
+            this.buttonA.Click += new System.EventHandler(this.buttonA_Click);
+            // 
+            // buttonReset
+            // 
+            this.buttonReset.Location = new System.Drawing.Point(446, 169);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(230, 47);
+            this.buttonReset.TabIndex = 27;
+            this.buttonReset.Text = "COMENZAR o REINICIAR";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
             // labelRegularExpressionDefinition
             // 
@@ -391,10 +424,10 @@
             // labelQ1
             // 
             this.labelQ1.AutoSize = true;
-            this.labelQ1.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelQ1.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelQ1.Location = new System.Drawing.Point(823, 223);
             this.labelQ1.Name = "labelQ1";
-            this.labelQ1.Size = new System.Drawing.Size(88, 55);
+            this.labelQ1.Size = new System.Drawing.Size(90, 55);
             this.labelQ1.TabIndex = 18;
             this.labelQ1.Text = "Q1";
             // 
@@ -516,11 +549,11 @@
             // 
             this.AutomatonStrings.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AutomatonStrings.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutomatonStrings.Location = new System.Drawing.Point(19, 399);
+            this.AutomatonStrings.Location = new System.Drawing.Point(19, 436);
             this.AutomatonStrings.Name = "AutomatonStrings";
             this.AutomatonStrings.ReadOnly = true;
             this.AutomatonStrings.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.AutomatonStrings.Size = new System.Drawing.Size(787, 115);
+            this.AutomatonStrings.Size = new System.Drawing.Size(787, 78);
             this.AutomatonStrings.TabIndex = 4;
             this.AutomatonStrings.Text = "";
             // 
@@ -532,41 +565,9 @@
             this.AutomatonLog.Name = "AutomatonLog";
             this.AutomatonLog.ReadOnly = true;
             this.AutomatonLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.AutomatonLog.Size = new System.Drawing.Size(787, 113);
+            this.AutomatonLog.Size = new System.Drawing.Size(787, 148);
             this.AutomatonLog.TabIndex = 3;
-            this.AutomatonLog.Text = "";
-            // 
-            // buttonReset
-            // 
-            this.buttonReset.Location = new System.Drawing.Point(446, 169);
-            this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(230, 47);
-            this.buttonReset.TabIndex = 27;
-            this.buttonReset.Text = "REINICIAR";
-            this.buttonReset.UseVisualStyleBackColor = true;
-            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
-            // 
-            // buttonA
-            // 
-            this.buttonA.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonA.Location = new System.Drawing.Point(867, 467);
-            this.buttonA.Name = "buttonA";
-            this.buttonA.Size = new System.Drawing.Size(109, 47);
-            this.buttonA.TabIndex = 28;
-            this.buttonA.Text = "a";
-            this.buttonA.UseVisualStyleBackColor = true;
-            this.buttonA.Click += new System.EventHandler(this.buttonA_Click);
-            // 
-            // buttonB
-            // 
-            this.buttonB.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonB.Location = new System.Drawing.Point(990, 467);
-            this.buttonB.Name = "buttonB";
-            this.buttonB.Size = new System.Drawing.Size(109, 47);
-            this.buttonB.TabIndex = 29;
-            this.buttonB.Text = "b";
-            this.buttonB.UseVisualStyleBackColor = true;
-            this.buttonB.Click += new System.EventHandler(this.buttonB_Click);
+            this.AutomatonLog.Text = "********Think Outside the BOX********";
             // 
             // Form1
             // 

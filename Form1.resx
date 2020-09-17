@@ -121,12 +121,12 @@
     <value>17, 17</value>
   </metadata>
   <data name="Language.Text" xml:space="preserve">
-    <value>Tipos (Azul):
-	entero
-	decimal
-	cadena
-	booleano
-	caracter
+    <value>Tipos:
+	entero (Púrpura)
+	decimal (Cyan)
+	cadena (Gris)
+	booleano (Naranja)
+	caracter (Café)
 
 Operadores Aritméticos (Azul):
 	+ - * / ++ --
@@ -149,7 +149,7 @@ Comentarios (Rojo):
 Palabras Reservadas (Verde):
 	SI SINO FIN_SI
 	EN_CASO CASO: OTRO CASO: FIN_CASO
-	SEA
+	SEA:
 	PARA DESDE HASTA HACER FIN_PARA
 	MIENTRAS FIN_MIENTRAS
 	INCREMENTO

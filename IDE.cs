@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
 
 namespace LFP_PROYECTO1_Basic_IDE
@@ -177,7 +178,7 @@ namespace LFP_PROYECTO1_Basic_IDE
                 stringLength = rtb.Text.Length;
             }
 
-            // To know the number of rows
+            // To know the number of rows where we are
             try
             {
                 if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == true)
@@ -194,6 +195,7 @@ namespace LFP_PROYECTO1_Basic_IDE
                 Console.WriteLine(e.Message);
             }
 
+            // To know the number of columns where we are
             try
             {
                 lineLastIndex = rtb.Text.Length - 1;
@@ -512,6 +514,66 @@ namespace LFP_PROYECTO1_Basic_IDE
                     return rtb.Text.Length;
                 }*/
             }
+
+            return rtb.Text.Length;
+        }
+
+        // !*
+        public int processText2(RichTextBox rtb)  // Incomplete
+        {
+            string word = "";
+
+            // To know if the string is increasing or decreasing
+            if (rtb.Text.Length > stringLength)
+            {
+                isStringIncreasing = true;
+                stringLength = rtb.Text.Length;
+            }
+            else
+            {
+                isStringIncreasing = false;
+                stringLength = rtb.Text.Length;
+            }
+
+            // To know the number of rows where we are
+            try
+            {
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == true)
+                {
+                    row++;
+                }
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == false)
+                {
+                    row--;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            // To know the number of columns where we are
+            try
+            {
+                lineLastIndex = rtb.Text.Length - 1;
+                for (int i = rtb.Text.Length - 1; i > 0; i--)
+                {
+                    if (rtb.Text[i] == '\n')
+                    {
+                        lineFirstIndex = i + 1;
+                        break;
+                    }
+                }
+                column = lineLastIndex - lineFirstIndex + 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            //******************************
+
+
 
             return rtb.Text.Length;
         }
@@ -1091,6 +1153,32 @@ namespace LFP_PROYECTO1_Basic_IDE
             }
 
             return isCharacter;
+        }
+
+        public bool isVariableName(string token)
+        {
+            bool isVariableName = false;
+            char[] initialCharacter = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+            char[] acceptedCharacters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_' };
+
+            // This step assures we have one letter as the begining character of the variable
+            for (int i = 0; i < initialCharacter.Length; i++)
+            {
+                if (token[0] != initialCharacter[i])
+                    return false;
+            }
+
+            // Next we test every consecutive character is defined as accepted one
+            for (int i = 0; i < token.Length; i++)
+            {
+                for (int j = 0; j < acceptedCharacters.Length; j++)
+                {
+                    if (token[i] != acceptedCharacters[j])
+                        return false;
+                }
+            }
+
+            return isVariableName;
         }
 
         public string[] createFileProjectGTP(RichTextBox rtb)

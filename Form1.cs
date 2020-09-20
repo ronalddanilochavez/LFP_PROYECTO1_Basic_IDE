@@ -142,6 +142,11 @@ namespace LFP_PROYECTO1_Basic_IDE
             Log.Text = myIDE.tokenList;
         }
 
+        private void ButtonCompile_Click(object sender, EventArgs e)
+        {
+            Log.Text = myIDE.compile(IDELexer.Text);
+        }
+
         //********************************************************
         //********************************************************
         // Menu
@@ -202,6 +207,7 @@ namespace LFP_PROYECTO1_Basic_IDE
 
         //********************************************************
         //********************************************************
+        // Automaton AFD
 
         private void buttonReset_Click(object sender, EventArgs e)
         {
@@ -331,11 +337,6 @@ namespace LFP_PROYECTO1_Basic_IDE
             AutomatonLog.Clear();
             AutomatonLog.AppendText("\n" + "Q0" + " Estado inicial");
             AutomatonStrings.Clear();
-        }
-
-        private void ButtonCompile_Click(object sender, EventArgs e)
-        {
-            Log.Text = myIDE.compile(IDELexer.Text);
         }
     }
 }

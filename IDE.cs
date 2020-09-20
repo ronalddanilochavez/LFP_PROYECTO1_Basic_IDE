@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
@@ -522,7 +523,481 @@ namespace LFP_PROYECTO1_Basic_IDE
             return rtb.Text.Length;
         }
 
-        public string compile(string text)
+        public int processText2(RichTextBox rtb)
+        {
+            string word = "";
+
+            // To know if the string is increasing or decreasing
+            if (rtb.Text.Length > stringLength)
+            {
+                isStringIncreasing = true;
+                stringLength = rtb.Text.Length;
+            }
+            else
+            {
+                isStringIncreasing = false;
+                stringLength = rtb.Text.Length;
+            }
+
+            // To know the number of rows where we are
+            try
+            {
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == true)
+                {
+                    row++;
+                }
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == false)
+                {
+                    row--;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            // To know the number of columns where we are
+            try
+            {
+                lineLastIndex = rtb.Text.Length - 1;
+                for (int i = rtb.Text.Length - 1; i > 0; i--)
+                {
+                    if (rtb.Text[i] == '\n')
+                    {
+                        lineFirstIndex = i + 1;
+                        break;
+                    }
+                }
+                column = lineLastIndex - lineFirstIndex + 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            // When open a string
+            if (rtb.Text.Length >= 1)
+            {
+                if (rtb.Text[rtb.Text.Length - 1] == '"')
+                {
+                    closedString = !closedString;
+                }
+            }
+
+            string token = "";
+
+            //****************
+            // To find the main tokens
+            for (int i = (rtb.Text.Length - 1); i >= 0; i--)
+            {
+                word = Convert.ToString(rtb.Text[i]) + word;
+
+                //////////////////////////////////////////////
+
+                if (closedShortCommentary == true && closedLongCommentary == true)
+                {
+                    // To color the defined tokens
+
+                    // 1 character length
+                    if (word.Length == 1)
+                    {
+                        for (int k = 0; k < tokensPink1.Length; k++)
+                        {
+                            if (word == tokensPink1[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensPink1[k].Length, Color.Magenta, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensBlue1.Length; k++)
+                        {
+                            if (word == tokensBlue1[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensBlue1[k].Length, Color.Blue, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    /*
+                    // To find the valid "identifiers"
+                    if (word == "=" || word == ";")
+                    {
+                        string tempWord = "";
+
+                        if (i - 1 >= 0)
+                        {
+                            string reverseWord(string myWord)
+                            {
+                                string reversedWord = "";
+
+                                for (int m = myWord.Length - 1; m >= 0; m--)
+                                {
+                                    reversedWord += Convert.ToString(myWord[m]);
+                                }
+
+                                return reversedWord;
+                            }
+
+                            string giveWordFromTo(RichTextBox rtb1, int from, int to)
+                            {
+                                string givenWord = "";
+
+                                for (int s = from; s <= to; s++)
+                                {
+                                    givenWord += Convert.ToString(rtb1.Text[s]);
+                                }
+
+                                return givenWord;
+                            }
+
+                            for (int k = i - 1; k >= 0; k--)
+                            {
+                                tempWord += Convert.ToString(rtb.Text[k]);
+
+                                try
+                                {
+                                    if (rtb.Text[k] == 'o' && rtb.Text[k - 8] == 'b')
+                                    {
+                                        if (giveWordFromTo(rtb, k - 8, k) == "booleano")
+                                        {
+                                            colorText(giveWordFromTo(rtb, k + 1, i - 1), k + 1, Color.DarkBlue, Color.Magenta, rtb);
+                                            break;
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e.Message);
+                                }
+                            }
+                        }
+
+                        break;
+                    }*/
+
+                    // 2 characters length
+                    if (word.Length == 2)
+                    {
+                        for (int k = 0; k < tokensBlue2.Length; k++)
+                        {
+                            if (word == tokensBlue2[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensBlue2[k].Length, Color.Blue, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensGreen2.Length; k++)
+                        {
+                            if (word == tokensGreen2[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen2[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 4 characters length
+                    if (word.Length == 4)
+                    {
+                        for (int k = 0; k < tokensGreen4.Length; k++)
+                        {
+                            if (word == tokensGreen4[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen4[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 5 characters length
+                    if (word.Length == 5)
+                    {
+                        for (int k = 0; k < tokensGreen5.Length; k++)
+                        {
+                            if (word == tokensGreen5[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen5[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 6 characters length
+                    if (word.Length == 6)
+                    {
+                        for (int k = 0; k < tokensGreen6.Length; k++)
+                        {
+                            if (word == tokensGreen6[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen6[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensPurple6.Length; k++)
+                        {
+                            if (word == tokensPurple6[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensPurple6[k].Length, Color.Purple, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensGray6.Length; k++)
+                        {
+                            if (word == tokensGray6[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGray6[k].Length, Color.Gray, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 7 characters length
+                    if (word.Length == 7)
+                    {
+                        for (int k = 0; k < tokensGreen7.Length; k++)
+                        {
+                            if (word == tokensGreen7[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen7[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensCyan7.Length; k++)
+                        {
+                            if (word == tokensCyan7[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensCyan7[k].Length, Color.Cyan, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 8 characters length
+                    if (word.Length == 8)
+                    {
+                        for (int k = 0; k < tokensGreen8.Length; k++)
+                        {
+                            if (word == tokensGreen8[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen8[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensOrange8.Length; k++)
+                        {
+                            if (word == tokensOrange8[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensOrange8[k].Length, Color.Orange, Color.Black, rtb);
+                            }
+                        }
+
+                        for (int k = 0; k < tokensBrown8.Length; k++)
+                        {
+                            if (word == tokensBrown8[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensBrown8[k].Length, Color.Orange, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 10 characters length
+                    if (word.Length == 10)
+                    {
+                        for (int k = 0; k < tokensGreen10.Length; k++)
+                        {
+                            if (word == tokensGreen10[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen10[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 12 characters length
+                    if (word.Length == 12)
+                    {
+                        for (int k = 0; k < tokensGreen12.Length; k++)
+                        {
+                            if (word == tokensGreen12[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen12[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 14 characters length
+                    if (word.Length == 14)
+                    {
+                        for (int k = 0; k < tokensGreen14.Length; k++)
+                        {
+                            if (word == tokensGreen14[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen14[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+                    // 15 characters length
+                    if (word.Length == 15)
+                    {
+                        for (int k = 0; k < tokensGreen15.Length; k++)
+                        {
+                            if (word == tokensGreen15[k])
+                            {
+                                colorText(word, rtb.Text.Length - tokensGreen15[k].Length, Color.Green, Color.Black, rtb);
+                            }
+                        }
+                    }
+
+
+                    //////////////////////////////////////////////
+
+                    // Testing if a word is boolean
+                    if (isBoolean(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Orange, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                        break;
+                    }
+
+                    // Testing if a word is string
+                    if (closedString == false /*&& isString(word)*/)
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Gray, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                        break;
+                    }
+
+                    // Testing if a word is character
+                    if (isCharacter(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Brown, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                    }
+
+                    // Testing if a word is decimal before integer
+                    if (isDecimal(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Cyan, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                    }
+
+                    // Testing if a word is integer after decimal
+                    if (isInteger(word))
+                    {
+                        colorText(word, rtb.Text.Length - word.Length, Color.Purple, Color.Black, rtb);
+                        //tokenList += "\nNuevo Token = " + word;
+                        //token = word;
+                    }
+
+                }
+
+                //////////////////////////////////////////////
+
+                // To paint the short commentary //.........
+                if (word == "//")
+                {
+                    closedShortCommentary = false;
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Red, rtb);
+                }
+                if (word.Length >= 2 && closedShortCommentary == false && word[0] == '/' && word[1] == '/' && word[word.Length - 1] == '\n')
+                {
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
+                    closedShortCommentary = true;
+                    break;
+                }
+
+                // To paint the long commentary between /*....*/
+                if (word == "/*")
+                {
+                    closedLongCommentary = false;
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Red, rtb);
+                    break;
+                }
+                if (closedLongCommentary == false && word == "*/")
+                {
+
+                    closedLongCommentary = true;
+                    colorText(word, rtb.Text.Length - word.Length, Color.Red, Color.Black, rtb);
+                    break;
+                }
+
+                //////////////////////////////////////////////
+
+                // This limits the maximun length of "word"
+                if (i == lineFirstIndex)
+                {
+                    break;
+                }
+
+                // This limits the word to the size of the actual line
+                /*if (rtb.Text[i] == '\n')
+                {
+                    return rtb.Text.Length;
+                }*/
+            }
+
+            return rtb.Text.Length;
+        }
+
+        public int processText3(RichTextBox rtb)
+        {
+            string word = "";
+
+            // To know if the string is increasing or decreasing
+            if (rtb.Text.Length > stringLength)
+            {
+                isStringIncreasing = true;
+                stringLength = rtb.Text.Length;
+            }
+            else
+            {
+                isStringIncreasing = false;
+                stringLength = rtb.Text.Length;
+            }
+
+            // To know the number of rows where we are
+            try
+            {
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == true)
+                {
+                    row++;
+                }
+                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == false)
+                {
+                    row--;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            // To know the number of columns where we are
+            try
+            {
+                lineLastIndex = rtb.Text.Length - 1;
+                for (int i = rtb.Text.Length - 1; i > 0; i--)
+                {
+                    if (rtb.Text[i] == '\n')
+                    {
+                        lineFirstIndex = i + 1;
+                        break;
+                    }
+                }
+                column = lineLastIndex - lineFirstIndex + 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            //******************************
+
+
+
+            return rtb.Text.Length;
+        }
+
+            public string compile(string text)
         {
             string tokenLog = "********Think Outside the BOX********";
             string line = "";

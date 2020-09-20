@@ -681,31 +681,32 @@ namespace LFP_PROYECTO1_Basic_IDE
                                         if (k == line.Length - 1)
                                         {
                                             // Nedeed if the line ends without a '=' or ';'
-                                            tokenLog += "\nIdentificador NO Válido";
                                             identifierNotValid = true;
+                                            identifierExpected = true;
                                         }
                                     }
                                     else
                                     {
                                         wordLength = word.Length;
+                                        // We remove the spaces in the begining and in the end
                                         word = trimWord(word);
                                         if (isIdentifier(word))
                                         {
                                             identifiers.Add(word);
                                             token = word;
-                                            wordLength = word.Length;
+                                            identifierExpected = false;
                                         }
                                         else
                                         {
-                                            tokenLog += "\nIdentificador NO Válido";
                                             identifierNotValid = true;
+                                            identifierExpected = false;
                                         }
 
                                         break;
                                     }
                                 }
 
-                                identifierExpected = false;
+                                //identifierExpected = false;
                                 break;
                             }
                         }
@@ -715,6 +716,7 @@ namespace LFP_PROYECTO1_Basic_IDE
                             start += wordLength;
                             if (identifierNotValid == true)
                             {
+                                tokenLog += "\nIdentificador NO Válido";
                                 identifierNotValid = false;
                             }
                             else

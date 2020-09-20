@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -235,6 +237,7 @@ namespace LFP_PROYECTO1_Basic_IDE
 
                 if (closedShortCommentary == true && closedLongCommentary == true)
                 {
+                    // To color the defined tokens
 
                     // 1 character length
                     if (word.Length == 1)
@@ -424,6 +427,7 @@ namespace LFP_PROYECTO1_Basic_IDE
                         }
                     }
 
+
                     //////////////////////////////////////////////
 
                     // Testing if a word is boolean
@@ -518,67 +522,6 @@ namespace LFP_PROYECTO1_Basic_IDE
             return rtb.Text.Length;
         }
 
-        // !*
-        public int processText2(RichTextBox rtb)  // Incomplete
-        {
-            string word = "";
-
-            // To know if the string is increasing or decreasing
-            if (rtb.Text.Length > stringLength)
-            {
-                isStringIncreasing = true;
-                stringLength = rtb.Text.Length;
-            }
-            else
-            {
-                isStringIncreasing = false;
-                stringLength = rtb.Text.Length;
-            }
-
-            // To know the number of rows where we are
-            try
-            {
-                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == true)
-                {
-                    row++;
-                }
-                if (rtb.Text[rtb.Text.Length - 1] == '\n' && isStringIncreasing == false)
-                {
-                    row--;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            // To know the number of columns where we are
-            try
-            {
-                lineLastIndex = rtb.Text.Length - 1;
-                for (int i = rtb.Text.Length - 1; i > 0; i--)
-                {
-                    if (rtb.Text[i] == '\n')
-                    {
-                        lineFirstIndex = i + 1;
-                        break;
-                    }
-                }
-                column = lineLastIndex - lineFirstIndex + 1;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            //******************************
-
-
-
-            return rtb.Text.Length;
-        }
-
-
         public string compile(string text)
         {
             string tokenLog = "********Think Outside the BOX********";
@@ -588,8 +531,12 @@ namespace LFP_PROYECTO1_Basic_IDE
             string token = "";
             string tokenTemp = "";
             int start = 0;
+            int wordLength = 0;
             bool isLongComment = false;
             bool isShortComment = false;
+            bool identifierExpected = false;
+            List<string> identifiers = new List<string>();
+            bool identifierNotValid = false;
 
             // To process the commentaries we cut off the characters enclosed inside it and we only left the '\n' characters
             for (int i = 0; i < text.Length; i++)
@@ -652,6 +599,7 @@ namespace LFP_PROYECTO1_Basic_IDE
                     }
 
                     start = 0;
+                    identifierExpected = false;
 
                     while (start < line.Length)
                     {
@@ -660,46 +608,119 @@ namespace LFP_PROYECTO1_Basic_IDE
 
                         for (int j = start; j < line.Length; j++)
                         {
-                            word += Convert.ToString(line[j]);
+                            if (identifierExpected == false)
+                            {
+                                word += Convert.ToString(line[j]);
 
-                            // Defined tokens
-                            // Needed, because compareToDefinedTokens erases tokenTemp if is not a defined token
-                            if ((tokenTemp = compareToDefinedTokens(word)).Length > 0)
-                            {
-                                token = tokenTemp;
-                            }
+                                // Defined tokens
+                                // Needed, because compareToDefinedTokens erases tokenTemp if is not a defined token
+                                if ((tokenTemp = compareToDefinedTokens(word)).Length > 0)
+                                {
+                                    token = tokenTemp;
+                                    wordLength = token.Length;
+                                }
+                                if (token == "booleano" || token == "cadena" || token == "caracter" || token == "decimal" || token == "entero")
+                                {
+                                    identifierExpected = true;
+                                    break;
+                                }
 
-                            // To test if is a boolean type
-                            if (isBoolean(word))
-                            {
-                                token = word;
+                                // To test if is a boolean type
+                                if (isBoolean(word))
+                                {
+                                    token = word;
+                                    wordLength = token.Length;
+                                }
+                                // To test if is a string type
+                                if (isString(word))
+                                {
+                                    token = word;
+                                    wordLength = token.Length;
+                                }
+                                // To test if is a character type
+                                if (isCharacter(word))
+                                {
+                                    token = word;
+                                    wordLength = token.Length;
+                                }
+                                // To test if is a decimal type, we need to test decimal before integer
+                                if (isDecimal(word))
+                                {
+                                    token = word;
+                                    wordLength = token.Length;
+                                }
+                                // To test if is an integer type
+                                if (isInteger(word))
+                                {
+                                    token = word;
+                                    wordLength = token.Length;
+                                }
+
+                                // To test if it is an identifier
+                                for (int k = 0; k < identifiers.Count; k++)
+                                {
+                                    if (word.Length == identifiers[k].Length)
+                                    {
+                                        if (word == identifiers[k])
+                                        {
+                                            token = word;
+                                            wordLength = token.Length;
+                                        }
+                                    }
+                                }
                             }
-                            // To test if is a string type
-                            if (isString(word))
+                            else
                             {
-                                token = word;
-                            }
-                            // To test if is a character type
-                            if (isCharacter(word))
-                            {
-                                token = word;
-                            }
-                            // To test if is a decimal type, we need to test decimal before integer
-                            if (isDecimal(word))
-                            {
-                                token = word;
-                            }
-                            // To test if is an integer type
-                            if (isInteger(word))
-                            {
-                                token = word;
+                                word = "";
+                                for (int k = start; k < line.Length; k++)
+                                {
+                                    if (line[k] != '=' && line[k] != ';')
+                                    {
+                                        word += Convert.ToString(line[k]);
+                                        wordLength = word.Length;
+                                        if (k == line.Length - 1)
+                                        {
+                                            // Nedeed if the line ends without a '=' or ';'
+                                            tokenLog += "\nIdentificador NO Válido";
+                                            identifierNotValid = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        wordLength = word.Length;
+                                        word = trimWord(word);
+                                        if (isIdentifier(word))
+                                        {
+                                            identifiers.Add(word);
+                                            token = word;
+                                            wordLength = word.Length;
+                                        }
+                                        else
+                                        {
+                                            tokenLog += "\nIdentificador NO Válido";
+                                            identifierNotValid = true;
+                                        }
+
+                                        break;
+                                    }
+                                }
+
+                                identifierExpected = false;
+                                break;
                             }
                         }
 
-                        if (token.Length > 0)
+                        if (token.Length > 0 || identifierNotValid == true)
                         {
-                            tokenLog += "\nToken = \"" + token + "\"";
-                            start += token.Length; 
+                            start += wordLength;
+                            if (identifierNotValid == true)
+                            {
+                                identifierNotValid = false;
+                            }
+                            else
+                            {
+                                tokenLog += "\nToken = \"" + token + "\"";
+                            }
                         }
                         else
                         {
@@ -707,12 +728,54 @@ namespace LFP_PROYECTO1_Basic_IDE
                         }
                     }
 
-                    start = 0;
                     line = "";
                 }
             }
 
             return tokenLog;
+        }
+
+        private string trimWord(string word)
+        {
+            string temp1 = "";
+            string temp2 = "";
+
+            if (word.Length > 0)
+            {
+                for (int i = 0; i < word.Length; i++)
+                {
+                    if (word[i] == ' ')
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        for (int j = i; j < word.Length; j++)
+                        {
+                            temp1 += Convert.ToString(word[j]);
+                        }
+                        break;
+                    }
+                }
+
+                for (int i = temp1.Length - 1; i >= 0; i--)
+                {
+                    if (temp1[i] == ' ')
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        for (int j = 0; j <= i; j++)
+                        {
+                            temp2 += Convert.ToString(temp1[j]);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            return temp2;
         }
 
         private string compareToDefinedTokens(string word)
@@ -908,40 +971,6 @@ namespace LFP_PROYECTO1_Basic_IDE
             }
 
             return token;
-        }
-
-            //
-            public string tokenLog(string text)
-        {
-            string tokenList = "";
-            string word = "";
-
-            for (int i = 0; i < text.Length; i++ )
-            {
-                word = Convert.ToString(text[i]) + word;
-
-                for (int k = 0; k < bLueTokens.Length; k++)
-                {
-                    if (word == bLueTokens[k] )
-                    {
-                        tokenList += "\n" + "Nuevo Token = " + bLueTokens[k];  
-                    }
-                }
-            }
-
-            return tokenList;
-        }
-
-        // !*
-        public void processFile(string text, RichTextBox rtb)
-        {
-            string word = "";
-
-            for (int i = 0; i < text.Length; i++)
-            {
-                word = Convert.ToString(text[i]) + word;
-                processText(rtb);
-            }
         }
 
         public int cursorColumnPosition (RichTextBox rtb)
@@ -1155,30 +1184,56 @@ namespace LFP_PROYECTO1_Basic_IDE
             return isCharacter;
         }
 
-        public bool isVariableName(string token)
+        // The acdepted identifier begins with a letter and then it can have letters, numbers or '_'
+        public bool isIdentifier(string token)
         {
-            bool isVariableName = false;
+            bool acceptedCharacter = false;
+
             char[] initialCharacter = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
             char[] acceptedCharacters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_' };
 
-            // This step assures we have one letter as the begining character of the variable
-            for (int i = 0; i < initialCharacter.Length; i++)
+            if (token.Length > 0)
             {
-                if (token[0] != initialCharacter[i])
-                    return false;
-            }
-
-            // Next we test every consecutive character is defined as accepted one
-            for (int i = 0; i < token.Length; i++)
-            {
-                for (int j = 0; j < acceptedCharacters.Length; j++)
+                // This step assures we have one letter as the begining character of the variable
+                for (int i = 0; i < initialCharacter.Length; i++)
                 {
-                    if (token[i] != acceptedCharacters[j])
-                        return false;
+                    if (token[0] == initialCharacter[i])
+                    {
+                        // Next we test every consecutive character is defined as accepted one
+                        for (int j = 1; j < token.Length; j++)
+                        {
+                            acceptedCharacter = false;
+
+                            for (int k = 0; k < acceptedCharacters.Length; k++)
+                            {
+                                if (token[j] == acceptedCharacters[k])
+                                {
+                                    acceptedCharacter = true;
+                                    break;
+                                }
+                            }
+
+                            if (acceptedCharacter == true)
+                            {
+                                if (j == token.Length - 1)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
 
-            return isVariableName;
+            return false;
         }
 
         public string[] createFileProjectGTP(RichTextBox rtb)
